@@ -1,11 +1,11 @@
 * Emacs Org
 
-*TIP* Utilize <C-c '> para validar as expressões no org-babel
+*TIP*: Utilize <C-c '> para validar as expressões no org-babel
 
 *TIP*:
-<l + TAB: abre um bloco latex
-<s + TAB: abre um bloco de código
-<q + TAB: abre um bloco de citação
+<l + TAB: abre um bloco latex.
+<s + TAB: abre um bloco de código.
+<q + TAB: abre um bloco de citação.
 
 * Configuração
 *** Inicialização
@@ -544,6 +544,19 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   (let ((tags-revert-without-query t))  ; don't query, revert silently
     (visit-tags-table default-directory nil)))
 #+end_src
+
+**** Visual Bookmarks (como no visual studio)
+#+begin_src emacs-lisp
+;; PACKAGE: bm
+;; visual bookmarks
+(require 'bm)
+;; um clica na margem (onde tem o número de linha) e bookmark aquela linha
+;; utiliza o botão de rolagem do mouse para andar entre os bookmarks.
+(global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
+(global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
+(global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
+#+end_src
+
 
 *** Edição
 
