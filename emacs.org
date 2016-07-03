@@ -556,8 +556,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
 (global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
 #+end_src
-
-
 *** Edição
 
 **** Alinhar por whitespace
