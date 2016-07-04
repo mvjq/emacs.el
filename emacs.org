@@ -73,7 +73,7 @@
 
 **** GUI
 
-	 Desligando GUI bullshit:
+     Desligando GUI bullshit:
 #+begin_src emacs-lisp
 (when window-system
   (tooltip-mode -1)
@@ -85,7 +85,7 @@
 
 **** Helm - o novo ido
 
-	 Carregando os diretórios de helm e asyng
+     Carregando os diretórios de helm e asyng
 
 #+begin_src emacs-lisp
 ;; PACKAGE: semantic-mode
@@ -291,28 +291,28 @@
 
 
 (add-hook 'ibuffer-hook
-	  (lambda ()
-	    (ibuffer-vc-set-filter-groups-by-vc-root)
-	    (unless (eq ibuffer-sorting-mode 'alphabetic)
-	      (ibuffer-do-sort-by-alphabetic))))
+      (lambda ()
+        (ibuffer-vc-set-filter-groups-by-vc-root)
+        (unless (eq ibuffer-sorting-mode 'alphabetic)
+          (ibuffer-do-sort-by-alphabetic))))
 
 (setq ibuffer-formats
       '((mark modified read-only vc-status-mini " "
-	      (name 18 18 :left :elide)
-	      " "
-	      (size 9 -1 :right)
-	      " "
-	      (mode 16 16 :left :elide)
-	      " "
-	      (vc-status 16 16 :left)
-	      " "
-	      filename-and-process)))
+          (name 18 18 :left :elide)
+          " "
+          (size 9 -1 :right)
+          " "
+          (mode 16 16 :left :elide)
+          " "
+          (vc-status 16 16 :left)
+          " "
+          filename-and-process)))
 
 #+end_src
 
 **** Shell pop
 
-	 Terminal popup como uma diva
+     Terminal popup como uma diva
 #+begin_src emacs-lisp
 ;; PACKAGE: shell-pop.el
 ;; terminal popup (:
@@ -459,7 +459,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (autoload 'multi-term-next "multi-term" nil t)
 (setq multi-term-program "/bin/zsh")
 
-(add-hook 'term-mode-hook		;because of autopair
+(add-hook 'term-mode-hook       ;because of autopair
   #'(lambda () (setq autopair-dont-activate t)))
 #+end_src
 
@@ -733,7 +733,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+begin_src emacs-lisp
 ;; PACKAGE: markdown mode
 (autoload 'markdown-mode "markdown-mode"
-	   "Majoir ode for editing markdown files" t)
+       "Majoir ode for editing markdown files" t)
 ;; (add-to-list 'auto-mode-alist  '("\\.text\\'" . markdown-mode))
 ;; (add-to-list 'auto-mode-alist  '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
@@ -788,9 +788,9 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (setq-default
  frame-title-format
  (list '((buffer-file-name " %f" (dired-directory
-				  dired-directory
-				  (revert-buffer-function " %b"
-							  ("%b - dir: " default-directory)))))))
+                  dired-directory
+                  (revert-buffer-function " %b"
+                              ("%b - dir: " default-directory)))))))
 
 ;; cores que os erros do flymake vao aparecer
 (custom-set-faces
@@ -830,8 +830,8 @@ font-lock-warning-face t)))))
 
 **** Zeal ta no ponto (Y)
 
-	 Open Zeal with the thing at point obs: DONT WORK, just open zeal
-	 (still cool btw)
+     Open Zeal with the thing at point obs: DONT WORK, just open zeal
+     (still cool btw)
 #+begin_src emacs-lisp
 (global-set-key "\C-cd" 'zeal-at-point)
 #+end_src
@@ -844,7 +844,7 @@ font-lock-warning-face t)))))
 #+end_src
 **** Fycheck
 
-	 Flycheck - syntax checking on background
+     Flycheck - syntax checking on background
 #+begin_src emacs-lisp
 (add-hook 'after-init-hook #'global-flycheck-mode)
 ;; using tooltip
@@ -924,19 +924,19 @@ font-lock-warning-face t)))))
                                 (call-interactively 'compile)))
 (add-hook 'c-mode-hook
            (lambda ()
-	     (unless (file-exists-p "Makefile")
-	       (set (make-local-variable 'compile-command)
+         (unless (file-exists-p "Makefile")
+           (set (make-local-variable 'compile-command)
                     ;; emulate make's .c.o implicit pattern rule, but with
                     ;; different defaults for the CC, CPPFLAGS, and CFLAGS
                     ;; variables:
                     ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-		    (let ((file (file-name-nondirectory buffer-file-name)))
+            (let ((file (file-name-nondirectory buffer-file-name)))
                       (format "%s -c -o %s.o %s %s %s"
                               (or (getenv "CC") "gcc")
                               (file-name-sans-extension file)
                               (or (getenv "CPPFLAGS") "-DDEBUG=9")
                               (or (getenv "CFLAGS") "-ansi -pedantic -Wall -g")
-			      file))))))
+                  file))))))
 #+end_src
 ***** ggtags
       ggtags, best sistema de tags
@@ -987,18 +987,18 @@ font-lock-warning-face t)))))
     (if (looking-at- "\\_>") t
       (backward-char 1)
       (if (looking-at "\\.") t
-	(backward-char 1)
-	(if (looking-at "->") t nil)))))
+    (backward-char 1)
+    (if (looking-at "->") t nil)))))
 
 (defun irony--indent-or-complete ()
   (interactive)
   (cond ((and (not (use-region-p))
-	      (irony--check-expastion))
-	 (message "complete")
-	 (company-complete-common))
-	(t
-	 (message "indent")
-	 (call-interactively 'c-indent-line-or-region))))
+          (irony--check-expastion))
+     (message "complete")
+     (company-complete-common))
+    (t
+     (message "indent")
+     (call-interactively 'c-indent-line-or-region))))
 (defun irony-mode-keys ()
   "modify keymaps used by irony-mode"
 
@@ -1007,7 +1007,7 @@ font-lock-warning-face t)))))
 (add-hook 'c-mode-common-hook 'irony-mode-keys)
 
 ;; company-quick-help (mostra ajuda em indle)
-(company-quickhelp-mode 1)		;
+(company-quickhelp-mode 1)      ;
 
 #+end_src
 ***** Eldoc - helpdoce no bufferline
@@ -1027,7 +1027,7 @@ font-lock-warning-face t)))))
 
 ***** :OFF: Helm-dash
       Dash do mac sabe? Agora no emacs
-	  obs:não funciona por algum motivo referente a instalação
+      obs:não funciona por algum motivo referente a instalação
 #+begin_src emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/elpa/helm-dash")
 (require 'helm-dash)
@@ -1163,13 +1163,13 @@ font-lock-warning-face t)))))
 
 #+begin_src emacs-lisp
 (add-hook 'speedbar--reconfigure-keymaps-hook
-	  '(lambda ()
-	     (define-key speedbar-key-map (kbd "<up>") 'speedbar-prev)
-	     (define-key speedbar-key-map (kbd "<down>") 'speedbar-next)
-	     (define-key speedbar-key-map (kbd "<right>") 'speedbar-expand-line)
-	     (define-key speedbar-key-map (kbd "<left>" ) 'speedbar-contract-line)
-	     (define-key speedbar-key-map (kbd "M-<up>" ) 'speedbar-up-directory)
-	     (define-key speedbar-key-map (kbd "<f5>") 'speedbar-refresh)))
+      '(lambda ()
+         (define-key speedbar-key-map (kbd "<up>") 'speedbar-prev)
+         (define-key speedbar-key-map (kbd "<down>") 'speedbar-next)
+         (define-key speedbar-key-map (kbd "<right>") 'speedbar-expand-line)
+         (define-key speedbar-key-map (kbd "<left>" ) 'speedbar-contract-line)
+         (define-key speedbar-key-map (kbd "M-<up>" ) 'speedbar-up-directory)
+         (define-key speedbar-key-map (kbd "<f5>") 'speedbar-refresh)))
      (setq speedbar-show-unknown-files t)
 #+end_src
 **** :OFF: Outline Mode (HS)
@@ -1272,9 +1272,9 @@ point reaches the beginning or end of the buffer, stop there."
 
 *** Defuns
 
-	Functions i found in the interwebs (sorry for not having the
-	source url).
-#+begin_src emacs-lisp
+    Functions i found in the interwebs (sorry for not having the
+    source url).
+    #+begin_src emacs-lisp
 ;; funcao parte da mensagem de erro no minibuffer
  (defun my-flymake-show-help ()
    (when (get-char-property (point) 'flymake-overlay)
@@ -1343,25 +1343,25 @@ point reaches the beginning or end of the buffer, stop there."
 ;;
 ;; slick copy
 ;;
-(defadvice kill-ring-save (before slick-copy activate compile) "When called
-  interactively with no active region, copy a single line instead."
-  (interactive (if mark-active (list (region-beginning) (region-end)) (message
-								       "Copied line") (list (line-beginning-position) (line-beginning-position
-                                                                                                                       2)))))
 
-(defadvice kill-region (before slick-cut activate compile)
-  "When called interactively with no active region, kill a single line instead."
-  interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (list (line-beginning-position)
-           (line-beginning-position 2)))
-
-
-#+end_src
+(defadvice kill-ring-save (before slick-copy activate compile)
+      "When called interactively with no active region, copy a single line instead."
+      (interactive
+       (if mark-active (list (region-beginning) (region-end))
+         (message "Copied line")
+         (list (line-beginning-position)
+               (line-beginning-position 2)))))
+    (defadvice kill-region (before slick-cut activate compile)
+      "When called interactively with no active region, kill a single line instead."
+      (interactive
+       (if mark-active (list (region-beginning) (region-end))
+         (list (line-beginning-position)
+               (line-beginning-position 2)))))
+    #+end_src
 
 *** Emacs Debugging
 
-#+begin_src emacs-lisp
+    #+begin_src emacs-lisp
 ;; configure trace on init file errors
 (setq edebug-trace t)
 
@@ -1379,6 +1379,14 @@ point reaches the beginning or end of the buffer, stop there."
             nil
             t))
 (add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
+
+
+(defun indent-whole-buffer ()
+  "indent whole buffer"
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max)))
 
 ;; eval buffer (init file)
 ;; found on interwebs
@@ -1473,4 +1481,4 @@ That buffer should be current already."
         (search-backward "ERROR!")))))
 
 
-#+end_src
+ #+end_src
