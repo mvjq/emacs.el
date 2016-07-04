@@ -768,6 +768,12 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
      (setq org-src-fontify-natively t) ;; syntax highlight no modo babel
      #+end_src
 
+**** Org-mode - navegation
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook (lambda ()
+                           (local-set-key "\M-n" 'outline-next-visible-heading)
+                           (local-set-key "\M-p" 'outline-previous-visible-heading)))
+#+end_src
 *** Temas e configurações visuais
 **** Fontes e smooth scroll
 #+begin_src emacs-lisp
@@ -813,7 +819,8 @@ font-lock-warning-face t)))))
 #+end_src
 
 *** Programming
-**** Aggressive Indent - CUIDADO: identação agressiva
+**** Aggressive Indent - WARNING: really agressive
+
 #+begin_src emacs-lisp
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
@@ -822,19 +829,22 @@ font-lock-warning-face t)))))
 #+end_src
 
 **** Zeal ta no ponto (Y)
-     Carrego o que tiver no pont para o zeal
+
+	 Open Zeal with the thing at point obs: DONT WORK, just open zeal
+	 (still cool btw)
 #+begin_src emacs-lisp
 (global-set-key "\C-cd" 'zeal-at-point)
 #+end_src
 **** Yasnippet
+
 #+begin_src emacs-lisp
 ;; PACKAGE: yasnippet
 ;; yet another snippet mode
 (yas-global-mode 1)
 #+end_src
 **** Fycheck
-     Configurando essa maravilha de flycheck, melhor pessoa (compila
-     em background) e avisa por erros e inconsistência.
+
+	 Flycheck - syntax checking on background
 #+begin_src emacs-lisp
 (add-hook 'after-init-hook #'global-flycheck-mode)
 ;; using tooltip
@@ -1128,26 +1138,28 @@ font-lock-warning-face t)))))
 #+end_src
 
 *** Hooks
+
 #+begin_src emacs-lisp
-(add-hook 'before-save-hook 'delete-trailing-whitespace) ;; remover espaco em branco que sobra
-(add-hook 'text-mode-hook 'turn-on-auto-fill) ;; modo auto fil para textos
+(add-hook 'before-save-hook 'delete-trailing-whitespace) ;; remove the dreadful trailing whitespace
+(add-hook 'text-mode-hook 'turn-on-auto-fill) ;; text mode = best place for auto fill mode
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 #+end_src
 
-*** Keybindings(atalhos) e navegação
+*** Keybindings and navigation
 **** :OFF: Avy, fast navigation by char
+
 #+begin_src emacs-lisp
 ;;(global-set-key (kbd "C-c j") 'avy-goto-word-or-subword-1)
 ;;(global-set-key (kbd "s-.") 'avy-goto-word-or-subword-1)
 ;;(global-set-key (kbd "s-w") 'ace-window)
 #+end_src
+**** Font size
 
-**** Tamanho da fonte
 #+begin_src emacs-lisp
 (bind-key "C-+" 'text-scale-increase)
 (bind-key "C--" 'text-scale-decrease)
 #+end_src
-**** navegação com Speedbar
+**** Speedbar
 
 #+begin_src emacs-lisp
 (add-hook 'speedbar--reconfigure-keymaps-hook
@@ -1161,25 +1173,21 @@ font-lock-warning-face t)))))
      (setq speedbar-show-unknown-files t)
 #+end_src
 **** :OFF: Outline Mode (HS)
+
 #+begin_src emacs-lisp
 ;;(global-set-key (kbd "C-c f") 'hs-hid-eblock)
 ;;(global-set-key (kbd "C-c s") 'hs-show-block)
 ;;(global-set-key (kbd "C-c a") 'hs-toggle-hiding)
 #+end_src
-**** Org-mode - navegação
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook (lambda ()
-                           (local-set-key "\M-n" 'outline-next-visible-heading)
-                           (local-set-key "\M-p" 'outline-previous-visible-heading)))
-#+end_src
-**** Windows (movimentação entre janelas)
+**** Windmove
+
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-x <up>") 'windmove-up)
 (global-set-key (kbd "C-x <down>") 'windmove-down)
 (global-set-key (kbd "C-x <right>") 'windmove-right)
 (global-set-key (kbd "C-x <left>") 'windmove-left)
 #+end_src
-**** Mover no ínicio da linha
+**** Move to
 
 #+begin_src emacs-lisp
 (defun sacha/smarter-move-beginning-of-line (arg)
@@ -1208,14 +1216,12 @@ point reaches the beginning or end of the buffer, stop there."
 ;; remap C-a to `smarter-move-beginning-of-line'
 (global-set-key [remap move-beginning-of-line]
                 'sacha/smarter-move-beginning-of-line)
-
 #+end_src
 
-**** Movimentação rápida dentro com arquivo com SHIFT
+**** fast navigation with <C+Shift+_>
 
 #+begin_src emacs-lisp
-
-;; KEYBINDINGS (colocar num arquivo melhor)
+;; KEYBINDINGS :TODO: move to a better place (file??)
  ;; Move more quickly
 (global-set-key (kbd "C-S-n")
                 (lambda ()
@@ -1238,78 +1244,56 @@ point reaches the beginning or end of the buffer, stop there."
                   (ignore-errors (backward-char 5))))
 #+end_src
 **** Pop to mark
+
      from: Sasha.org config file
      Handy way of getting back to previous places.
-
      #+begin_src emacs-lisp
      (bind-key "C-x p" 'pop-to-mark-command)
      (setq set-mark-command-repeat-pop t)
      #+end_src
-**** Which Key mode - qual tecla
-     modo que mostra um completion para os atalhos :)
+**** Which Key mode
+
+     Show commands after a certain key is used
 #+begin_src emacs-lisp
 ;;PACKAGE: which-key mode
 (which-key-mode)
 #+end_src
 **** Help - guide key
+
      from: sasha.org config file
-     #+begin_src emacs-lisp
+ #+begin_src emacs-lisp
  (use-package guide-key
   :diminish guide-key-mode
   :init
   (progn
   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
   (guide-key-mode 1)))  ; Enable guide-key-mode
-     #+end_src
+ #+end_src
 
 *** Defuns
 
-    Funções que eu garimpo na internet
-
+	Functions i found in the interwebs (sorry for not having the
+	source url).
 #+begin_src emacs-lisp
-;; defun for testing emacs
-
-
-(defun prelude-move-beginning-of-line (arg)
-  "Move point back to indentation of beginning of file.
-
- Move point to the first non-whitespace character on this line.
- If point is already there, move to the beginning of the line.
- Effectively toggle between the first non-whitespace character and
- and the beginning of the line.
-
- If ARG is not nil or 1, move forward ARG - 1 lines first. If point reaches the beginning or end of the buffer, stop there."
-  (interactive "^p")
-  (setq arg (or arg 1))
-  ;;move line first
-  (when (/= arg 1)
-    (let ((line-move-visual 1))
-      (forward-line (1 -arg))))
-
-  (let ((orig-point (point)))
-    (back-to-indentation)
-    (when (= orig-point (point))
-      (move-beginning-of-line))))
-
-(global-set-key (kbd "C-a") 'prelude-move-beginning-of-line)
-
-
 ;; funcao parte da mensagem de erro no minibuffer
  (defun my-flymake-show-help ()
    (when (get-char-property (point) 'flymake-overlay)
      (let ((help (get-char-property (point) 'help-echo)))
        (if help (message "%s" help)))))
 
+;; indent in whitespace (interative action)
 (defun indent-whitespace (beg end spaces)
   "Indent region of code by N spaces"
   (interactive "r\nnEnter number of spaces: \n")
   (indent-code-rigidly beg end spaces))
 
+;; insert date, but <C-c .> is nice
 (defun insert-date ()
   "insert date at point"
   (interactive)
   (insert (format-time-string "%a %Y-%m-%d - %l:%M %p")))
 
+;; for the old time sakes
 (defun ascii-table ()
   "Print the ascii table. Based on a defun by Alex Schroeder <asc@bsiag.com>"
   (interactive)
@@ -1333,6 +1317,7 @@ point reaches the beginning or end of the buffer, stop there."
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
+;; edit files like sudo
 (defun sudo-edit (&optional arg)
   "do sudo things"
   (interactive "p")
@@ -1366,21 +1351,21 @@ point reaches the beginning or end of the buffer, stop there."
 
 (defadvice kill-region (before slick-cut activate compile)
   "When called interactively with no active region, kill a single line instead."
-  (interactive
+  interactive
    (if mark-active (list (region-beginning) (region-end))
      (list (line-beginning-position)
-           (line-beginning-position 2)))))
+           (line-beginning-position 2)))
 
 
 #+end_src
 
-*** Emacs
-    Funções, modos e configurações para depuração do Emacs
-#+begin_src emacs-lisp
-;; debug
-(setq edebug-trace t)
-;; byte compile init files
+*** Emacs Debugging
 
+#+begin_src emacs-lisp
+;; configure trace on init file errors
+(setq edebug-trace t)
+
+;; byte compile init files
 (defun byte-compile-init-dir ()
   "Byte-compile all your dotfiles."
   (interactive)
@@ -1393,14 +1378,10 @@ point reaches the beginning or end of the buffer, stop there."
                   (delete-file (concat buffer-file-name "c"))))
             nil
             t))
-
 (add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
 
-#+end_src
-
-**** Defun
-
-#+begin_src emacs-lisp
+;; eval buffer (init file)
+;; found on interwebs
 (with-eval-after-load 'debug
   (defun debugger-setup-buffer (debugger-args)
     "Initialize the `*Backtrace*' buffer for entry to the debugger.
@@ -1467,7 +1448,8 @@ That buffer should be current already."
           (pop tem))))
     (debugger-make-xrefs)))
 
-
+;; test config file without leaving emacs
+;; found on interwebs
 (defun test-emacs ()
   (interactive)
   (require 'async)
