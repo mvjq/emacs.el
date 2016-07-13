@@ -9,7 +9,7 @@ Atencao, utilizo org-babel-load para *programacao literaria*.
 
 * TODOs:
   - [x] Emacs.org on github
-  - [ ] end portunhol
+  - [x] end portunhol
   - [ ] folders and dependency files on github (load-package???)
   - [ ] new directory structure
   - [ ] use-require everywhere
