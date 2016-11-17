@@ -9,31 +9,34 @@
 
 * Configuration
 *** Initialization
+**** Personal info
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "M. Vinicius Junqueira"
+      user-mail-address "codejunq@gmail.com")
+#+END_SRC
 **** Loading path and dirs
-
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/lisp")  ;;  all things lisp
 (add-to-list 'load-path "~/.emacs.d/lisp/code")
 (add-to-list 'load-path "~/.emacs.d/lisp/misc")
 (add-to-list 'load-path "~/.emacs.d/lisp/misc/use-package")
 (require 'use-package)
-#+end_src
+(require 'eieio) ;; because of a bug in helm-dash
+#+END_SRC
 
 **** Package System
-
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (require 'package)
 (add-to-list 'package-archives
 			 '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (setq package-enable-at-startup nil)
 (package-initialize)
-#+end_src
+#+END_SRC
 
 *** General Configuration
 **** Backup
-
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq make-backup-files t ;; yep for backup
 		backup-by-copying t ;;  backup though copying
 		backup-directory-alist '(("." . "~/.backup/emacs")) ;; backup directory
@@ -48,11 +51,10 @@
   (setq-default save-place t)
   (setq auto-save-interval 500)
   (setq large-file-warning-threshold 100000000)
-#+end_src
+#+END_SRC
 
 **** History
-
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (setq savehist-file "~/.emacs.d/savehist")
 (savehist-mode 1)
 (setq history-length 10)
@@ -62,16 +64,14 @@
 	  '(kill-ring
 		search-ring
 		regexp-search-ring))
-#+end_src
-
+#+END_SRC
 **** Helm - the new ido
-
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: semantic-mode
 ;; loading semantic for helm-semantic-imenu (amazing with c code)
 (semantic-mode 1)
-(add-to-list 'load-path "~/.emacs.d/lisp/misc/async")
-(add-to-list 'load-path "~/.emacs.d/lisp/misc/helm")
+(add-to-list 'load-path "~/.emacs.d/elpa/helm")
+(add-to-list 'load-path "~/.emacs.d/lisp/helm/emacs-async")
 
 ;; PACKAGE: helm-mode and helm-config
 (require 'helm-mode)
@@ -85,8 +85,10 @@
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
 (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
+
 (when (executable-find "curl")
   (setq helm-google-suggest-use-curl-p t))
+
 
 (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
 	  helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
@@ -130,33 +132,33 @@
 ;; PACKAGE: helm-swoop
 ;;
 ;; super 'occur mode'
-(require 'helm-swoop)
+;(require 'helm-swoop)
 
-(global-set-key (kbd "C-c h o") 'helm-swoop)
-(global-set-key (kbd "C-c s") 'helm-multi-swoop-all)
+;(global-set-key (kbd "C-c h o") 'helm-swoop)
+;(global-set-key (kbd "C-c s") 'helm-multi-swoop-all)
 ;; When doing isearch, hand the wornd over the heml swoop
-(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+;(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
 
 ;; from helm-swoop to heml multi swoop all (d)
-(define-key helm-swoop-map (kbd "M-i") 'heml-multi-swoop-all-from-hel-swoop)
+;(define-key helm-swoop-map (kbd "M-i") 'heml-multi-swoop-all-from-hel-swoop)
 
 ;; save buffer when helm-multi-swoop-edit coimpelte
-(setq heml-multi-swoop-edit-save t)
+;(setq heml-multi-swoop-edit-save t)
 
 ;; if this value is t, split window inside the current window
-(setq helm-swoop-split-with-multiple-windows t)
+;(setq helm-swoop-split-with-multiple-windows t)
 
 ;; split direction 'split-window-vertically or split-window horizontally
-(setq helm-swoop-split-direction 'split-window-vertically)
+;(setq helm-swoop-split-direction 'split-window-vertically)
 
 ;; if nil, you can slightly boost invoke speed in exchange for text color
-(setq helm-swoop-speed-or-color t)
+;(setq helm-swoop-speed-or-color t)
 
-(helm-mode 1)
+;(helm-mode 1)
 
-#+end_src
+#+END_SRC
 ***** Gtags
- #+begin_src emacs-lisp
+ #+BEGIN_SRC emacs-lisp
 (setq
  helm-gtags-ignore-case t
  helm-gtags-auto-update t
@@ -182,30 +184,29 @@
 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 
-#+end_src
+#+END_SRC
 ****** TODO colocar o imenu-or-semantic dentro de um atalho melhor
 **** Linum - line numbers
-
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: linum-mode
 ;; numeração de linhas inteligentes
 (global-linum-mode t)
 ;; turning off in org-mode because it's really, really slow
 (add-hook 'org-mode-hook (lambda () (linum-mode 0)))
-#+end_src
+#+END_SRC
 **** Winner Mode - frame navigation
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: winner mode
 ;; windows history by C-c left (undo) or C-c right (redo)
 (use-package winner
    :ensure winner
    :init (winner-mode 1))
-#+end_src
+#+END_SRC
 
 **** Modeline
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
 (global-visual-line-mode 1)
 (display-time)
@@ -216,34 +217,36 @@
 (line-number-mode 1)
 ;; PACKAGE: powerline.el
 ;; powering the mode line
-(require 'powerline)
-(powerline-vim-theme)
-#+end_src
-
+(add-to-list 'load-path "~/.emacs.d/lisp/spaceline")
+(require 'spaceline-config)
+(spaceline-spacemacs-theme)
+;(require 'powerline)
+;(powerline-vim-theme)
+#+END_SRC
 
 **** Recentf: remember last visited files
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: recentf
 (require 'recentf)
 (setq recentf-max-saved-items 200
 	  recentf-max-menu-items 15)
 ;; (global-set-key "\C-c\ \C-r" 'recentf-open-files) ;; BINDING-KEY
 (recentf-mode)
-#+end_src
+#+END_SRC
 
 **** Aliases
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (defalias 'list-buffers 'ibuffer)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'evb 'eval-buffer)
 (defalias 'evr 'eval-region)
-#+end_src
+#+END_SRC
 
 **** Buffer Editing
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'capitalize-region 'disabled nil)
@@ -274,11 +277,11 @@
 		  " "
 		  filename-and-process)))
 
-#+end_src
+#+END_SRC
 
 **** Shell pop
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: shell-pop.el
 ;; terminal popup (:
 
@@ -341,10 +344,10 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 ;; tipo um org capture
 ;; PRECISO VER: nao possui tab completion, pode ser um projeto
 ;; que para que eu traga um tab completion nesse term no emacs
-#+end_src
+#+END_SRC
 **** Electric Pair: auto complete for 'pars chars'
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: eletric-pair.mode
 ;; Auto-complete of symbols like (), {}, []
 (electric-pair-mode 1) ;; novo auto pair
@@ -353,12 +356,18 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 							(?\" . ?\")
 							(?\{ . ?\})
 							) )
-#+end_src
+#+END_SRC
 
 **** Uniquify: unique buffer names
+#+BEGIN_SRC emacs-lisp
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'post-forward-angle-brackets))
+#+END_SRC
+
 **** Abbrevs
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (setq abbrev-file-name "~/.emacs.d/data/abbrev_defs") ;; database of abbrevs
 (abbrev-mode t)
 (setq abbrev-mode t
@@ -391,11 +400,11 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (require 'expand-region)
 (global-key-binding (kbd "M-m") 'er/expand-region)
 
-#+end_src
+#+END_SRC
 
 **** Undo Tree
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: undo-tree
 ;; visualize all the undo things done in a buffer in a tree view like
   (use-package undo-tree
@@ -406,24 +415,24 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 	  (global-undo-tree-mode)
 	  (setq undo-tree-visualizer-timestamps t)
 	  (setq undo-tree-visualizer-diff t)))
-#+end_src
+#+END_SRC
 
 **** Term Configuration
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (autoload 'multi-term "multi-term" nil t)
 (autoload 'multi-term-next "multi-term" nil t)
 (setq multi-term-program "/bin/zsh")
 
 (add-hook 'term-mode-hook       ;because of autopair
   #'(lambda () (setq autopair-dont-activate t)))
-#+end_src
+#+END_SRC
 
-#+end_src
+#+END_SRC
 
 **** Dimish: less names in modeline
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (when (require 'diminish nil 'noerror)
   (eval-after-load "yas"
 	'(diminish 'yas/minor-mode "yaS"))
@@ -449,10 +458,10 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (add-hook 'auto-fill-mode-hook
   (lambda()
 	(setq mode-name "afill"))))
-#+end_src
+#+END_SRC
 **** Highlight ()
 
-#+begin_#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 	 (add-hook 'highlight-parentheses-mode-hook
 		  '(lambda ()
 			 (setq autopair-handle-action-fns
@@ -470,11 +479,11 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   global-highlight-parentheses-mode t)
 
 
-#+end_src
+#+END_SRC
 
 **** Tags
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
  (setq path-to-ctags "/usr/bin/ctags"); <-- your ctags path here
 
   (defun create-tags (dir-name)
@@ -502,11 +511,11 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   (shell-command (format "etags *.%s" (or extension "el")))
   (let ((tags-revert-without-query t))  ; don't query, revert silently
 	(visit-tags-table default-directory nil)))
-#+end_src
+#+END_SRC
 
 **** Visual Bookmarks using mouse
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: bm
 ;; visual bookmarks
 (require 'bm)
@@ -515,26 +524,47 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
 (global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
 (global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
-#+end_src
+#+END_SRC
+**** Clipboard
+#+BEGIN_SRC emacs-lisp
+;; Save whatever’s in the current (system) clipboard before
+;; replacing it with the Emacs’ text.
+;; https://github.com/dakrone/eos/blob/master/eos.org
+(setq save-interprogram-paste-before-kill t)
+#+END_SRC
+**** Desktop Save
+	 saving the last frame/windows/buffers configurations
+#+BEGIN_SRC emacs-lisp
+
+;; from https://github.com/dakrone/eos/blob/master/eos-core.org
+(desktop-save-mode 1)
+(setq desktop-restore-eager 1)
+(setq desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\|KILL\\)")
+(setq desktop-restore-frames nil)
+#+END_SRC
 *** Editing file
+**** Searching
+#+BEGIN_SRC emacs-lisp
+ (setq search-default-mode #'char-fold-to-regexp)
+#+END_SRC
 **** Align by whitespace
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (defun align-whitespace (start end)
   "Align columns by whitespace"
   (interactive "r")
   (align-regexp start end
 				"\\(\\s-*\\)\\s-" 1 0 t))
-#+end_src
+#+END_SRC
 **** Mark Ring
-#+begin_#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (setq global-mark-ring-max 5000
 	  mark-ring-max 5000
 	  mode-require-final-newline t
 	  )
-#+end_src
+#+END_SRC
 **** Indentation e newline
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (setq c-default-style "linux";; linux style baby
 		c-basic-offset 4
 		tab-width      4)
@@ -562,19 +592,19 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 ;; set appearance of a tab that is represented by 4 spaces
 (setq-default tab-width 4)
 (delete-selection-mode)
-#+end_src
+#+END_SRC
 
 **** Kill ring
 
-#+begin_src language
+#+BEGIN_SRC language
 (setq kill-ring-max 5000                     ;increase kill ring capacity
 	  kill-whole-line t
 	  )                     ;if NIL, kil lwhole line and ove the next line up
-#+end_src
+#+END_SRC
 
 **** Defuns editing text files
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (defcustom prelude-indent-sensitive-modes
   '(coffee-mode python-mode slim-mode haml-mode yalm-mode)
   "Modes for whith auto-indenting is suppressed."
@@ -618,19 +648,19 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (global-set-key (kbd "C-o") 'prelude-smart-open-line)
 
 
-#+end_src
+#+END_SRC
 
 **** yank highlight :OFF:
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; Package for when you yank (paste) something, the yanked (pasted) region will be highlighted
 ;;(require 'volatile-highlights)
 ;;(volatile-highlights-mode t)
-#+end_src
+#+END_SRC
 
 **** Smart parens
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: smartparens-config
 (require 'smartparens-config)
 (setq sp-base-key-bindings 'paredit)
@@ -650,33 +680,33 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 
 
-#+end_src
+#+END_SRC
 
 **** Revert Mode - para quando merda acontece
 
 #+begin-src emacs-lisp
 (global-auto-revert-mode)
-#+end_src
+#+END_SRC
 **** Highlight current line
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (global-hl-line-mode)
-#+end_src
+#+END_SRC
 **** Multiples cursors
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: multiple-cursors
 (require 'multiple-cursors)
-#+end_src
+#+END_SRC
 
 **** Typing speed
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (require 'speed-type)
-#+end_src
+#+END_SRC
 **** Markdown mode
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: markdown mode
 (autoload 'markdown-mode "markdown-mode"
 	   "Majoir ode for editing markdown files" t)
@@ -684,10 +714,10 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 ;; (add-to-list 'auto-mode-alist  '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist  '("\\.md\\'" . markdown-mode))
-#+end_src
+#+END_SRC
 **** Ispell + Abbrev
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; snippet found in: http://endlessparentheses.com/ispell-and-abbrev-the-perfect-auto-correct.html
 (define-key ctl-x-map "\C-i"
   #'endless/ispell-word-then-abbrev)
@@ -731,21 +761,21 @@ abort completely with `C-g'."
 (setq save-abbrevs 'silently)
 (setq-default abbrev-mode t)
 
-#+end_src
+#+END_SRC
 
 **** Hungry Delete
      Delete space (no matter how much) with Ctrl+D
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (require 'hungry-delete)
 (global-hungry-delete-mode)
-#+end_src
+#+END_SRC
 **** Beacon - find your damn cursor
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; this help alot in big monitors
 (require 'beacon)
 (setq beacon-push-mark 35)
 (setq beacon-color "#666600")
-#+end_src
+#+END_SRC
 
 **** Fast searching with Swiper (helm backend)
 #+BEGIN_SRC emacs-lisp
@@ -755,7 +785,7 @@ abort completely with `C-g'."
 **** Creating parent directory
 	 Function i found in
 	 https://iqbalansari.github.io/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (defun my-create-non-existent-directory ()
       (let ((parent-directory (file-name-directory buffer-file-name)))
         (when (and (not (file-exists-p parent-directory))
@@ -763,21 +793,36 @@ abort completely with `C-g'."
           (make-directory parent-directory t))))
 (add-to-list 'find-file-not-found-functions #'my-create-non-existent-directory)
 
-#+end_src
+#+END_SRC
 
-
+**** Align by whitespace
+#+BEGIN_SRC emacs-lisp
+(defun bjm/align-whitespace (start end)
+  "Align columns by whitespace"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)\\s-" 1 0 t))
+#+END_SRC
+*** Buffers
+**** Scratch Buffer
+#+BEGIN_SRC emacs-lisp
+;; persistent-scratch
+(use-package persistent-scratch
+  :config
+  (persistent-scratch-setup-default))
+#+END_SRC
 
 *** Theming and visual configuration
 **** Fonts and smooth scroll
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (set-frame-font  "inconsolata-12")
 ;; scrolling to always be a line at a time
 (setq scroll-conservatively 10000)
-#+end_src
+#+END_SRC
 **** frame title and flymake highlight
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; Frame Title Bar with full path of file
 (setq-default
  frame-title-format
@@ -790,135 +835,45 @@ abort completely with `C-g'."
 (custom-set-faces
  '(flymake-errline ((((class color)) (:underline "red"))))
  '(flymake-warnline ((((class color)) (:underline "yellow")))))
-#+end_src
+#+END_SRC
 
 **** Font Lock for keywords
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (add-hook 'c-mode-common-hook
 			   (lambda ()
 				(font-lock-add-keywords nil
 				 '(("\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\|TIP\\|FUCKOFF\\):" 1
 font-lock-warning-face t)))))
 
-#+end_src
+#+END_SRC
 
 **** Colors, a lot of colors
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; i really dont know why i doing this add-to-list again
 (add-to-list 'custom-theme-load-path "/home/mvjunq/.emacs.d/elpa")
-(load-theme 'sanityinc-solarized-dark t)
+;(load-theme 'sanityinc-solarized-light t)
+(load-theme 'spacemacs-dark t)
 ;; (load-theme solarized-light t)
 ;(load-theme 'base16-monokai-dark)
-#+end_src
+#+END_SRC
 
 **** Set cursor color (i hate the default color on solarized)
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (set-cursor-color "#c75100")
-#+end_src
+#+END_SRC
 
 *** Programming
-**** Aggressive Indent - WARNING: really agressive
-
-#+begin_src emacs-lisp
-(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
-(add-hook 'ruby-mode-hook #'aggressive-indent-mode)
-(add-hook 'cc'-mode-hook #'aggressive-indent-mode)
-#+end_src
-
-**** Zeal ta no ponto (Y)
-
-	 Open Zeal with the thing at point obs: DONT WORK, just open zeal
-	 (still cool btw)
-#+begin_src emacs-lisp
-(global-set-key "\C-cd" 'zeal-at-point)
-#+end_src
-**** Yasnippet
-
-#+begin_src emacs-lisp
-;; PACKAGE: yasnippet
-;; yet another snippet mode
-(yas-global-mode 1)
-#+end_src
-**** Fycheck
-
-	 Flycheck - syntax checking on background
-#+begin_src emacs-lisp
-(add-hook 'after-init-hook #'global-flycheck-mode)
-;; using tooltip
-(eval-after-load 'flycheck
-  '(custom-set-variables
-   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
-(add-hook 'c-mode-hook 'flycheck-mode)
-(add-hook 'c++-mode-hook 'flycheck-mode)
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-(setq flycheck-check-syntax-automatically '(mode-enabled save))
-#+end_src
-****** Flycheck e helm (eu odeio tooltips)
-
-#+begin_src emacs-lisp
-(require 'helm-flycheck) ;; Not necessary if using ELPA package
-(eval-after-load 'flycheck
-  '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
-#+end_src
-
-**** Company Mode: autocomplete on steroids
-#+begin_src emacs-lisp
-;; PACKAGE: company-mode
-;; auto complete feature
-(require 'company)
-(require 'cc-mode)
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends (delete 'company-semantic company-backends))
-(define-key c-mode-map  [(tab)] 'company-complete)
-(define-key c++-mode-map  [(tab)] 'company-complete)
-;;(add-to-list 'company-c-headers-path-user "/usr/include/c++") ;eu posso colocar mais include aqui neh?:git
-#+end_src
-
-***** Default Colors
-
-
-	  *Código abaixo não faz sentido em não funcionar*
-
-	  (require 'color)
-	  (let ((bg (face-attribute 'default :background)))
-	  (custom-set-faces
-	  `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-	  `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-	  `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-	  `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-	  `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-
-**** Semantic Mode
-
-	 Code completion baseada no buffer atual
-#+begin_src emacs-lisp
-;; PACKAGE: semantic and cc-mode
-(require 'cc-mode)
-(require 'semantic)
-(global-semanticdb-minor-mode 1)
-(global-semantic-idle-scheduler-mode 1)
-;; mostra a função em que estamos em cima da tela
-(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
-;; adicionando mais paths para completion do semantic mode
-;; para toda biblioteca que eu quiser ter semantic, eu adiciono aqui
-(semantic-add-system-include "/usr/include/boost" 'c++-mode)
-;; (semantic-add-system-include "~linux/include") ;nao tenho esse diretorio
-(semantic-add-system-include "/usr/local/include") ;aqui ficaria os includes da máquina local
-(semantic-add-system-include "/usr/include") ;vou colocar o include (mesmo sabendo que ele está por padrão)
-#+end_src
-
 **** C/C++
 ***** Compilação
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: compile
 ;; utiliza o makefile do diretório atual, caso não, cria um temporário
 (require 'compile)
 ;; snippet found in http://endlessparentheses.com/better-compile-command.html
 ;; This gives a regular `compile-command' prompt.
 (define-key prog-mode-map [C-f5] #'compile)
+
 ;; This just compiles immediately.
 (define-key prog-mode-map [f5]
   #'endless/compile-please)
@@ -966,28 +921,28 @@ With a prefix argument, use comint-mode."
 				  file))))))
 
 
-#+end_src
+#+END_SRC
 ***** ggtags
 	  ggtags, best sistema de tags
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; dired vai mostrar as tags
 	  (add-hook 'dired-mode-hook 'ggtags-mode)
 	  (add-hook 'c-mode-common-hook
 	  (lambda ()
 	  (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
 	  (ggtags-mode 1))))
-#+end_src
+#+END_SRC
 
 ***** GDB - gnu debugger, (quase best) debugger (oi slime)
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; gdb-many-windows (múltiplas janelas ao usar o gdb)
 (setq
  gdb-many-windows t
  gdb-show-main t                        ;non-nil means display souce file containing the main routine ate startup
  )
-#+end_src
+#+END_SRC
 ***** Irony Mode - backend para autocomplete
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
@@ -1006,10 +961,10 @@ With a prefix argument, use comint-mode."
 ;; trigger completion at interest places, such as after scope operator
 (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 (add-hook 'irony-mode-hook 'irony-eldoc)
-#+end_src
+#+END_SRC
 ****** Defuns
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; (optional) bind TAB for indent or complete
 (defun irony--check-expastion()
   (save-excursion
@@ -1038,50 +993,61 @@ With a prefix argument, use comint-mode."
 ;; company-quick-help (mostra ajuda em indle)
 (company-quickhelp-mode 1)      ;
 
-#+end_src
+#+END_SRC
 ***** Eldoc - helpdoce no bufferline
-#+begin_src emacs-lisp
-(setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags``-I./ -I../' ")
+#+BEGIN_SRC emacs-lisp
+;;(setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags``-I./ -I../' ")
 (add-to-list 'load-path "elpa/c-eldoc")
 (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
-#+end_src
+#+END_SRC
 ***** :OFF: company-c-headers (auto complete para cabeçalhos)
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;;(add-to-list 'company-backends 'company-c-headers)
 ;;(add-to-list 'company-c-headers-path-user "/usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/../../../../include/c++/5.3.0")
 ;;(add-to-list 'company-c-headers-path-userm "/usr/include/")
 ;;(add-to-list 'company-c-headers-path-user "/usr/include/c++")
-#+end_src
+#+END_SRC
 
 ***** :OFF: Helm-dash
 	  Dash do mac sabe? Agora no emacs
 	  obs:não funciona por algum motivo referente a instalação
-#+begin_src emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/elpa/helm-dash")
-(require 'helm-dash)
-(setq helm-dash-common-docsets '("C" "C++"))
-(setq helm-dash-min-length 2)
-#+end_src
+#+BEGIN_SRC emacs-lisp
+;;  (use-package helm-dash
+;;   :ensure t
+;;   :bind (("C-c D" . helm-dash))
+;;   :init
+;;   (setq helm-dash-common-docsets '("ElasticSearch")
+;;         helm-dash-min-length 2)
+;;   :config
+;;   (defun eos/use-java-docset ()
+;;     (setq-local helm-dash-docsets '("Java")))
+;;   (defun eos/use-elisp-docset ()
+;;     (setq-local helm-dash-docsets '("Emacs Lisp")))
+;;   (add-hook 'java-mode-hook #'eos/use-java-docset)
+;;  (add-hook 'emacs-lisp-mode-hook #'eos/use-elisp-docset))
+
+
+#+END_SRC
 ***** Auto Complete com backend do irony+company
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; (optional) adds CC special commands to `company-begin-commands' in order to
 ;; trigger completion at interesting places, such as after scope operator
 ;;     std::|
 (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 (eval-after-load 'company
   '(add-to-list 'company-backends 'company-irony))
-#+end_src
+#+END_SRC
 
 ***** Flycheck+irony
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (eval-after-load 'flycheck
   '(add-to-list 'flycheck-checkers 'irony))
-#+end_src
+#+END_SRC
 
 ***** Semantic mode
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; PACKAGE: sematic (deja-vu?)
 ;; adiciona algumas libs para termos um contexto semântico
 (require 'semantic)
@@ -1090,63 +1056,256 @@ With a prefix argument, use comint-mode."
 ;; add new load path
 (semantic-add-system-include "/usr/local/include")
 (semantic-add-system-include "~/linux/include")
-(global-semantic-idle-summary-mode 1) ;; show functions args in minibuyffer
+(global-semantic-idle-summary-mode 1) ;; show functions args in minibuffer
 (global-semantic-stickyfunc-mode 1) ;; show in the top of file the funcion you are in
 (semantic-add-system-include "~/linux/kernel")
 (semantic-add-system-include "~/linux/include")
 (semantic-mode 1)
-#+end_src
+#+END_SRC
 ***** :OFF: Functions args (tooptip for include headers in /usr/include)
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;;(fa-config-default)
 ;;(add-to-list 'company-backends '(company-irony company-yasnippet))
 ;;(define-key c-mode-map  [(contrl tab)] 'moo-complete)
 ;;(define-key c++-mode-map  [(control tab)] 'moo-complete)
 ;;(define-key c-mode-map (kbd "M-o")  'fa-show)
 ;;(define-key c++-mode-map (kbd "M-o")  'fa-show)
-#+end_src
+#+END_SRC
 ***** Hooks
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; por alguma razão, preciso configurar isto denovo para prog-mode
 (add-hook 'prog-mode-hook
 			   (lambda ()
 				(font-lock-add-keywords nil
 				 '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
-#+end_src
+#+END_SRC
 **** Emacs Lisp
 ***** eldoc e rainbow delimiters (cores para delimitadoresx)
-#+begin_src emacs-lisp
-;; PACKAGE: eldoc
-;; helpdoc in minibuffer line
-(use-package "eldoc"
-  :commands turn-on-eldoc-mode
-  :init
-  (progn
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
-;; rainbow delimiters:
-;; PACKAGE: rainbow-delimiters: syntax highlight para ()
-(require 'rainbow-delimiters)
-(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'elisp-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'org-mode 'rainbow-delimiters-mode)
-#+end_src
-
+#+BEGIN_SRC emacs-lisp
+  ;; PACKAGE: eldoc
+  ;; helpdoc in minibuffer line
+  (use-package "eldoc"
+    :commands turn-on-eldoc-mode
+    :init
+    (progn
+    (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+    (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+    (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
+  ;; rainbow delimiters:
+  ;; PACKAGE: rainbow-delimiters: syntax highlight para ()
+  (require 'rainbow-delimiters)
+  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'elisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'after-init-hook 'global-company-mode)
+  (add-hook 'org-mode 'rainbow-delimiters-mode)
+#+END_SRC
 ***** Pulando e procurando código
 	  <C-c .> = find-function-at-point
 	  <C-c f> = find-function
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (define-key emacs-lisp-mode-map (kbd "C-c .") 'find-function-at-point)
 (bind-key "C-c f" 'find-function)
-#+end_src
+#+END_SRC
 **** Python
+#+BEGIN_SRC emacs-lisp
+(package-initialize)
+(elpy-enable)
+
+;; JEDI
+
+(use-package jedi
+  :ensure t
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (add-hook 'python-mode-hook 'jedi:ac-setup))
+(setq jedi:complete-on-dot t)
+;; for jedi backend
+(add-to-list 'company-backends 'company-jedi)
+(add-to-list 'company-backends '(company-jedi company-files))
+
+;;flycheck with elpy, not flymake
+(when (require 'flycheck nil t)
+	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+	(add-hook 'elpy-mode-hook 'flycheck-mode))
+
+;; pep8
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+#+END_SRC
+
+**** Haskell
+#+BEGIN_SRC emacs-lisp
+(setq haskell-font-lock-symbols t)
+;; still searching for the ideal haskell mode
+;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
+;; (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+;; (add-hook 'haskell-mode-hook 'haskell-decl-scan-mode)
+;; (add-hook 'haskell-mode-hook #'hindent-mode)
+;; using cabal, stack for another time
+;; (setq haskell-process-type 'stack-ghci)
+;; (setq haskell-process-path-ghci "stack")
+;; (setq haskell-process-args-ghci "ghci")
+;; (autoload 'ghc-init "ghc" nil t)
+;; (autoload 'ghc-debug "ghc" nil t)
+;; (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+;; (require 'flycheck)
+;; (require 'flycheck-haskell)
+;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+;; (add-hook 'flycheck-mode-hook 'flycheck-haskell-configure)
+;; (require 'company)
+;; (require 'company-ghci)
+;; (push 'company-ghci company-backends)
+;; (add-hook 'haskell-mode-hook 'company-mode)
+#+END_SRC
+
+***** Hasktags
+	  Use the M-. luke11
+#+BEGIN_SRC emacs-lisp
+(let ((my-cabal-path (expand-file-name "~/.cabal/bin")))
+  (setenv "PATH" (concat my-cabal-path path-separator (getenv "PATH")))
+  (add-to-list 'exec-path my-cabal-path))
+(custom-set-variables '(haskell-tags-on-save t))
+#+END_SRC
+
+***** Indentation
+#+BEGIN_SRC emacs-lisp
+;;(add-to-list 'load-path "home/mvjunq/.emacs.d/lisp/misc/structured-haskell-mode/elisp/")
+;;(require 'shm)
+;;(add-hook 'haskell-mode-hook #'structured-haskell-mode)
+#+END_SRC
+***** Cabal REPL
+#+BEGIN_SRC emacs-lisp
+(custom-set-variables '(haskell-process-type 'cabal-repl))
+#+END_SRC
+
+***** Keybiddings
+#+BEGIN_SRC emacs-lisp
+
+;; Haskell compilation mode
+(eval-after-load 'haskell-mode
+  '(define-key haskell-mode-map (kbd "C-c C-o") 'haskell-compile))
+(eval-after-load 'haskell-cabal
+ '(define-key haskell-cabal-mode-map (kbd "C-c C-o") 'haskell-compile))
+(custom-set-variables
+  '(haskell-process-suggest-remove-import-lines t)
+  '(haskell-process-auto-import-loaded-modules t)
+  '(haskell-process-log t))
+(eval-after-load 'haskell-mode '(progn
+  (define-key haskell-mode-maps (kbd "C-c C-l") 'haskell-process-load-or-reload)
+  (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+  (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
+  (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
+  (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
+  (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
+(eval-after-load 'haskell-cabal '(progn
+  (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+  (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+  (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+  (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
+#+END_SRC
+
+***** GHC-mod
+#+BEGIN_SRC emacs-lisp
+
+(let ((my-cabal-path (expand-file-name "~/.cabal/bin")))
+  (setenv "PATH" (concat my-cabal-path ":" (getenv "PATH")))
+  (add-to-list 'exec-path my-cabal-path))
+#+END_SRC
+
+**** Aggressive Indent - WARNING: really agressive
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+;;(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+;;(add-hook 'ruby-mode-hook #'aggressive-indent-mode)
+;;(add-hook 'cc'-mode-hook #'aggressive-indent-mode)
+
+#+END_SRC
+
+**** Zeal ta no ponto (Y)
+
+	 Open Zeal with the thing at point obs: DONT WORK, just open zeal
+	 (still cool btw)
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-cd" 'zeal-at-point)
+#+END_SRC
+**** Yasnippet
 
 #+begin_src emacs-lisp
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
-#+end_src
+;; PACKAGE: yasnippet
+;; yet another snippet mode
+(yas-global-mode 1)
+#+END_SRC
+**** Fycheck
+
+	 Flycheck - syntax checking on background
+#+BEGIN_SRC emacs-lisp
+(add-hook 'after-init-hook #'global-flycheck-mode)
+;; using tooltip
+(eval-after-load 'flycheck
+  '(custom-set-variables
+   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+(add-hook 'c-mode-hook 'flycheck-mode)
+(add-hook 'c++-mode-hook 'flycheck-mode)
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
+#+END_SRC
+****** Flycheck e helm (eu odeio tooltips)
+
+#+BEGIN_SRC emacs-lisp
+(require 'helm-flycheck) ;; Not necessary if using ELPA package
+(eval-after-load 'flycheck
+  '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
+#+END_SRC
+
+**** Company Mode: autocomplete on steroids
+#+BEGIN_SRC emacs-lisp
+;; PACKAGE: company-mode
+;; auto complete feature
+(require 'company)
+(require 'cc-mode)
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-backends (delete 'company-semantic company-backends))
+(define-key c-mode-map  [(tab)] 'company-complete)
+(define-key c++-mode-map  [(tab)] 'company-complete)
+;;(add-to-list 'company-c-headers-path-user "/usr/include/c++") ;eu posso colocar mais include aqui neh?:git
+#+END_SRC
+
+***** Default Colors
+
+
+	  *Código abaixo não faz sentido em não funcionar*
+
+	  (require 'color)
+	  (let ((bg (face-attribute 'default :background)))
+	  (custom-set-faces
+	  `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
+	  `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+	  `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+	  `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+	  `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+
+**** Semantic Mode
+
+	 Code completion baseada no buffer atual
+#+BEGIN_SRC emacs-lisp
+;; PACKAGE: semantic and cc-mode
+(require 'cc-mode)
+(require 'semantic)
+(global-semanticdb-minor-mode 1)
+(global-semantic-idle-scheduler-mode 1)
+;; mostra a função em que estamos em cima da tela
+(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+;; adicionando mais paths para completion do semantic mode
+;; para toda biblioteca que eu quiser ter semantic, eu adiciono aqui
+(semantic-add-system-include "/usr/include/boost" 'c++-mode)
+;; (semantic-add-system-include "~linux/include") ;nao tenho esse diretorio
+(semantic-add-system-include "/usr/local/include") ;aqui ficaria os includes da máquina local
+(semantic-add-system-include "/usr/include") ;vou colocar o include (mesmo sabendo que ele está por padrão)
+#+END_SRC
 
 **** Whitespace
 #+begin-src emacs-lisp
@@ -1155,47 +1314,40 @@ With a prefix argument, use comint-mode."
 	 ;;active whitespace mode to view all whitespace characters
 
 	 (global-set-key (kbd "C-c w") 'whitespace-mode)
-#+end_src
-**** :OFF: Projectile
-#+begin_src emacs-lisp
-;;(projectile-global-mode)
-;;(setq projectile-enable-caching t)
-#+end_src
+#+END_SRC
 **** Tab para autocomplete
-#+begin_src emacs-lisp
-(setq tab-always-indent 'complete)
-#+end_src
+#+BEGIN_SRC emacs-lisp
+  (setq tab-always-indent 'complete)
+#+END_SRC
 
 **** :OFF: Counsel-Dash
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;;; PACKAGE: counsel-dash
 ;;; see dash docsets with counsel (helm)
 ;;;(require 'counsel-dash)
-#+end_src
+#+END_SRC
+
+**** :OFF: Projectile
+#+BEGIN_SRC emacs-lisp
+;;(projectile-global-mode)
+;;(setq projectile-enable-caching t)
+#+END_SRC
 
 *** Hooks
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (add-hook 'before-save-hook 'delete-trailing-whitespace) ;; remove the dreadful trailing whitespace
 (add-hook 'text-mode-hook 'turn-on-auto-fill) ;; text mode = best place for auto fill mode
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-#+end_src
-*
+#+END_SRC
+
 *** Keybindings and navigation
-**** :OFF: Avy, fast navigation by char
-
-#+begin_src emacs-lisp
-;;(global-set-key (kbd "C-c j") 'avy-goto-word-or-subword-1)
-;;(global-set-key (kbd "s-.") 'avy-goto-word-or-subword-1)
-;;(global-set-key (kbd "s-w") 'ace-window)
-#+end_src
 **** Font size
-
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (bind-key "C-+" 'text-scale-increase)
 (bind-key "C--" 'text-scale-decrease)
-#+end_src
+#+END_SRC
 **** Speedbar
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (add-hook 'speedbar--reconfigure-keymaps-hook
 	  '(lambda ()
 		 (define-key speedbar-key-map (kbd "<up>") 'speedbar-prev)
@@ -1205,24 +1357,10 @@ With a prefix argument, use comint-mode."
 		 (define-key speedbar-key-map (kbd "M-<up>" ) 'speedbar-up-directory)
 		 (define-key speedbar-key-map (kbd "<f5>") 'speedbar-refresh)))
 	 (setq speedbar-show-unknown-files t)
-#+end_src
-**** :OFF: Outline Mode (HS)
-
-#+begin_src emacs-lisp
-;;(global-set-key (kbd "C-c f") 'hs-hid-eblock)
-;;(global-set-key (kbd "C-c s") 'hs-show-block)
-;;(global-set-key (kbd "C-c a") 'hs-toggle-hiding)
-#+end_src
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-x <up>") 'windmove-up)
-(global-set-key (kbd "C-x <down>") 'windmove-down)
-(global-set-key (kbd "C-x <right>") 'windmove-right)
-(global-set-key (kbd "C-x <left>") 'windmove-left)
-#+end_src
+#+END_SRC
 **** Move to
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (defun sacha/smarter-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
 
@@ -1249,11 +1387,11 @@ point reaches the beginning or end of the buffer, stop there."
 ;; remap) C-a to `smarter-move-beginning-of-line'
 (global-set-key [remap move-beginning-of-line]
 				'sacha/smarter-move-beginning-of-line)
-#+end_src
+#+END_SRC
 
 **** fast navigation with <C+Shift+_>
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; KEYBINDINGS :TODO: move to a better place (file??)
  ;; Move more quickly
 (global-set-key (kbd "C-S-n")
@@ -1275,38 +1413,66 @@ point reaches the beginning or end of the buffer, stop there."
 				(lambda ()
 				  (interactive)
 				  (ignore-errors (backward-char 5))))
-#+end_src
+#+END_SRC
 **** Pop to mark
-
 	 from: Sasha.org config file
 	 Handy way of getting back to previous places.
-	 #+begin_src emacs-lisp
+	 #+BEGIN_SRC emacs-lisp
 	 (bind-key "C-x p" 'pop-to-mark-command)
 	 (setq set-mark-command-repeat-pop t)
-	 #+end_src
+	 #+END_SRC
 **** Which Key mode
 
 	 Show commands after a certain key is used
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;;PACKAGE: which-key mode
 (which-key-mode)
-#+end_src
+#+END_SRC
 **** Help - guide key
 
 	 from: sasha.org config file
- #+begin_src emacs-lisp
+ #+BEGIN_SRC emacs-lisp
  (use-package guide-key
   :diminish guide-key-mode
   :init
   (progn
   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
   (guide-key-mode 1)))  ; Enable guide-key-mode
- #+end_src
+ #+END_SRC
 
-*** Org-mode
+**** visible bookmarks (F2)
 #+BEGIN_SRC emacs-lisp
-;; for org-babel and source code
-(setq org-confirm-babel-evaluate nil
+(use-package bm
+  :bind (("<C-f2>" . bm-toggle)
+         ("<f2>" . bm-next)
+         ("<S-f2>" . bm-previous)))
+#+END_SRC
+**** :OFF: Avy, fast navigation by char
+
+#+BEGIN_SRC emacs-lisp
+;;(global-set-key (kbd "C-c j") 'avy-goto-word-or-subword-1)
+;;(global-set-key (kbd "s-.") 'avy-goto-word-or-subword-1)
+;;(global-set-key (kbd "s-w") 'ace-window)
+#+END_SRC
+**** :OFF: Outline Mode (HS)
+
+#+BEGIN_SRC emacs-lisp
+;;(global-set-key (kbd "C-c f") 'hs-hid-eblock)
+;;(global-set-key (kbd "C-c s") 'hs-show-block)
+;;(global-set-key (kbd "C-c a") 'hs-toggle-hiding)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x <up>") 'windmove-up)
+(global-set-key (kbd "C-x <down>") 'windmove-down)
+(global-set-key (kbd "C-x <right>") 'windmove-right)
+(global-set-key (kbd "C-x <left>") 'windmove-left)
+#+END_SRC
+*** Org-mode
+**** Babel things
+#+BEGIN_SRC emacs-lisp
+  ;; for org-babel and source code
+  (setq org-confirm-babel-evaluate nil
       org-src-fontify-natively t
       org-src-tab-acts-natively t)
 #+END_SRC
@@ -1314,7 +1480,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 	Functions i found in the interwebs (sorry for not having the
 	source url).
-	#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; funcao parte da mensagem de erro no minibuffer
 (defun my-flymake-show-help ()
    (when (get-char-property (point) 'flymake-overlay)
@@ -1397,11 +1563,11 @@ point reaches the beginning or end of the buffer, stop there."
 	   (if mark-active (list (region-beginning) (region-end))
 		 (list (line-beginning-position)
 			   (line-beginning-position 2)))))
-	#+end_src
+#+END_SRC
 
 *** Emacs Debugging
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; configure trace on init file errors
 (setq edebug-trace t)
 
@@ -1519,6 +1685,4 @@ That buffer should be current already."
 		(delete-region (point-min) (point-max))
 		(insert output)
 		(search-backward "ERROR!")))))
-
-
-#+end_s
+#+END_SRC
