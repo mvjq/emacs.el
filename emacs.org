@@ -1,15 +1,16 @@
 * Emacs Org
 
-*TIP*: Use <C-c '> to eval the source block
-*TIP*: Use =M-x package-refresh-contents= to refresh the package list
-*TIP*:
-<l + TAB: opens a latex block
-<s + TAB: opens a source code block
-<q + TAB: opens a quotation block
+*TIPS*:
+ - Use <C-c '> to eval the source block
+ - Use =M-x package-refresh-contents= to refresh the package list
+ - <l + TAB: opens a latex block
+ - <s + TAB: opens a source code block
+ - <q + TAB: opens a quotation block
 
 * Configuration
 *** Initialization
-**** Personal info
+**** Personal infon
+	 Setting email and full name
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "M. Vinicius Junqueira"
       user-mail-address "codejunq@gmail.com")
@@ -52,9 +53,14 @@
   (setq auto-save-interval 500)
 #+END_SRC
 
+**** Font lock
+#+begin_src emacs-lisp
+  (global-font-lock-mode 1) ;font lock everywhere
+#+end_src
+
 **** History
 #+BEGIN_SRC emacs-lisp
-(setq savehist-file "~/.emacs.d/savehist")
+(setq savehist-file "~/.emacs.d/backup/savehist")
 (savehist-mode 1)
 (setq history-length 10)
 (setq history-delete-duplicates t)
@@ -66,6 +72,7 @@
 #+END_SRC
 **** Helm - the new ido
 #+BEGIN_SRC emacs-lisp
+
 ;; PACKAGE: semantic-mode
 ;; loading semantic for helm-semantic-imenu (amazing with c code)
 (semantic-mode 1)
@@ -84,11 +91,8 @@
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
 (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
-
 (when (executable-find "curl")
   (setq helm-google-suggest-use-curl-p t))
-
-
 (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
 	  helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
 	  helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
@@ -100,32 +104,33 @@
 
 (helm-autoresize-mode t)
 
+;; [#keybidings]
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
-(setq helm-apropos-fuzzy-match t)
-(setq helm-semantic-fuzzy-match t
-	  helm-imenu-fuzzy-match    t)
-(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-(setq helm-locate-fuzzy-match t)
-(global-set-key (kbd "C-c h o") 'helm-occur)
-(setq helm-apropos-fuzzy-match t)
-(setq helm-lisp-fuzzy-completion t)
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 (global-set-key (kbd "C-c h x") 'helm-register)
 (global-set-key (kbd "C-c h g") 'helm-google-suggest)
 (global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
+(global-set-key (kbd "C-c h o") 'helm-occur)
 
+(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+;;; fuzzy matching is pretty cool
+(setq helm-apropos-fuzzy-match t)
+(setq helm-semantic-fuzzy-match t
+	  helm-imenu-fuzzy-match    t)
+(setq helm-locate-fuzzy-match t)
+(setq helm-lisp-fuzzy-completion t)
+
+;; helm-eshell
 (require 'helm-eshell)
-
 (add-hook 'eshell-mode-hook
 		  #'(lambda ()
 			  (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
 (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
-
-
 
 ;;
 ;; PACKAGE: helm-swoop
@@ -156,7 +161,7 @@
 ;(helm-mode 1)
 
 #+END_SRC
-***** Gtags
+**** Gtags
  #+BEGIN_SRC emacs-lisp
 (setq
  helm-gtags-ignore-case t
@@ -164,19 +169,20 @@
  helm-gtags-use-input-at-cursor t
  helm-gtags-pulse-at-cursor t
  helm-gtags-pulse-at-cursor t
- helm-gtags-prefix-key "\C-cg"
+ helm-gtags-prefix-key "\C-c g"
  helm-gtags-suggested-key-mapping t
  )
 
 (require 'helm-gtags)
-;; enable helm-gtags mode
+;; enable helm-gtags in various modes
 (add-hook 'dired-mode-hook 'helm-gtags-mode)
 (add-hook 'eshell-mode-hook 'helm-gtags-mode)
 (add-hook 'c-mode-hook 'helm-gtags-mode)
 (add-hook 'c++-mode-hook 'helm-gtags-mode)
 (add-hook 'asm-mode-hook 'helm-gtags-mode)
 
-(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function) ;mostra todas as funções que a função chama
+;; [#keybinding]
+(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
 (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
 (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwin)
 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
@@ -204,18 +210,20 @@
 #+END_SRC
 
 **** Modeline
-
 #+BEGIN_SRC emacs-lisp
+
+;; things to show in the modeline
 (show-paren-mode 1)
 (global-visual-line-mode 1)
 (display-time)
 (display-battery-mode 1)
-(global-font-lock-mode 1)
+
 (size-indication-mode 1)
 (column-number-mode 1)
 (line-number-mode 1)
+
 ;; PACKAGE: powerline.el
-;; powering the mode line
+;; powering the mode line with spacemacs theme
 (add-to-list 'load-path "~/.emacs.d/lisp/spaceline")
 (require 'spaceline-config)
 (spaceline-spacemacs-theme)
@@ -224,13 +232,12 @@
 #+END_SRC
 
 **** Recentf: remember last visited files
-
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: recentf
 (require 'recentf)
 (setq recentf-max-saved-items 200
 	  recentf-max-menu-items 15)
-;; (global-set-key "\C-c\ \C-r" 'recentf-open-files) ;; BINDING-KEY
+;;(global-set-key "\C-c\ \C-r" 'recentf-open-files) ;; BINDING-KEY
 (recentf-mode)
 #+END_SRC
 
@@ -279,11 +286,9 @@
 #+END_SRC
 
 **** Shell pop
-
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: shell-pop.el
 ;; terminal popup (:
-
 
 (setq multi-term-program "/bin/zsh")
 (add-hook 'term-mode-hook
@@ -293,12 +298,14 @@
 		  (lambda ()
 			(setq show-trailing-whitespace nil)
 			))
+
+(autoload 'multi-term "multi-term" nil t)
+(autoload 'multi-term-next "multi-term" nil t)
 (defcustom term-unbind-key-list
   '("C-z" "C-x" "C-c" "C-h" "C-y" "<ESC>")
   "The key list that will need to be unbind."
   :type 'list
   :group 'multi-term)
-
 (defcustom term-bind-key-alist
   '(
 	("C-c C-c" . term-interrupt-subjob)
@@ -325,8 +332,8 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (add-hook 'term-mode-hook
 		  (lambda ()
 			(define-key term-raw-map (kbd "C-y") 'term-paste)))
-(require 'shell-pop)
 
+(require 'shell-pop)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -368,10 +375,8 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+BEGIN_SRC emacs-lisp
 (setq abbrev-file-name "~/.emacs.d/data/abbrev_defs") ;; database of abbrevs
-(abbrev-mode t)
 (setq abbrev-mode t
 	  save-abbrevs t)
-;; save the abbrev file
 (when (file-exists-p abbrev-file-name)
   (quietly-read-abbrev-file))
 (add-hook 'kill-emacs-hook
@@ -398,11 +403,9 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 (require 'expand-region)
 (global-key-binding (kbd "M-m") 'er/expand-region)
-
 #+END_SRC
 
 **** Undo Tree
-
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: undo-tree
 ;; visualize all the undo things done in a buffer in a tree view like
@@ -415,22 +418,13 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 	  (setq undo-tree-visualizer-timestamps t)
 	  (setq undo-tree-visualizer-diff t)))
 #+END_SRC
-
-**** Term Configuration
+**** Terminal Configuration
 
 #+BEGIN_SRC emacs-lisp
-(autoload 'multi-term "multi-term" nil t)
-(autoload 'multi-term-next "multi-term" nil t)
-(setq multi-term-program "/bin/zsh")
-
 (add-hook 'term-mode-hook       ;because of autopair
   #'(lambda () (setq autopair-dont-activate t)))
 #+END_SRC
-
-#+END_SRC
-
 **** Dimish: less names in modeline
-
 #+BEGIN_SRC emacs-lisp
 (when (require 'diminish nil 'noerror)
   (eval-after-load "yas"
@@ -446,9 +440,9 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   (eval-after-load "company"
 	  '(diminish 'company-mode "comp"))
   (eval-after-load "abbrev"
-	'(diminish 'abbrev-mode "abbv"))
+	'(diminish 'abbrev-mode "abbrv"))
  (eval-after-load "helm"
-	'(diminish 'helm-mode "hel"))
+	'(diminish 'helm-mode "helm"))
  (eval-after-load "Irony"
 	'(diminish 'irony-mode "iry"))
 (add-hook 'emacs-lisp-mode-hook
@@ -456,7 +450,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 	(setq mode-name "el")))
 (add-hook 'auto-fill-mode-hook
   (lambda()
-	(setq mode-name "afill"))))
+	(setq mode-name "fill"))))
 #+END_SRC
 **** Highlight ()
 
@@ -476,13 +470,11 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   (lambda ()
 	(highlight-parentheses-mode t))
   global-highlight-parentheses-mode t)
-
-
 #+END_SRC
 
-**** Tags
-
+**** CTags
 #+BEGIN_SRC emacs-lisp
+
  (setq path-to-ctags "/usr/bin/ctags"); <-- your ctags path here
 
   (defun create-tags (dir-name)
@@ -491,7 +483,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 	 (eshell-command
 	  (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
-  (defadvice find-tag (around refresh-etags activate)
+(defadvice find-tag (around refresh-etags activate)
    "Rerun etags and reload tags if tag not found and redo find-tag.
    If buffer is modified, ask about save before running etags."
   (let ((extension (file-name-extension (buffer-file-name))))
@@ -578,7 +570,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 ;; maitain indentation for files
 (require 'dtrt-indent)
 (dtrt-indent-mode 1)
-(setq dtrt-indent-verbosity 0)          ;evita mensagem de aviso para cada buffer com indentação que eu entrar
+(setq dtrt-indent-verbosity 0)          ;turn off anoying message about identation
 
 ;; PACKAGE: ws-butler
 (require 'ws-butler)
@@ -592,60 +584,55 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (setq-default tab-width 4)
 (delete-selection-mode)
 #+END_SRC
-
 **** Kill ring
-
-#+BEGIN_SRC language
+#+BEGIN_SRC emacs-lisp
 (setq kill-ring-max 5000                     ;increase kill ring capacity
 	  kill-whole-line t
 	  )                     ;if NIL, kil lwhole line and ove the next line up
 #+END_SRC
 
 **** Defuns editing text files
-
 #+BEGIN_SRC emacs-lisp
-(defcustom prelude-indent-sensitive-modes
-  '(coffee-mode python-mode slim-mode haml-mode yalm-mode)
-  "Modes for whith auto-indenting is suppressed."
-  :type 'list)
+  (defcustom prelude-indent-sensitive-modes
+    '(coffee-mode python-mode slim-mode haml-mode yalm-mode)
+    "Modes for whith auto-indenting is suppressed."
+    :type 'list)
 
+  (defun indent-region-or-buffer ()
+    "Indent a region if selected, otherwise the whole buffer."
+    (interactive)
+    (unless (member major-mode prelude-indent-sensitive-modes)
+      (save-excursion
+        (if (region-active-p)
+            (progn
+              (indent-region (region-beginning) (region-end))
+              (message "Indented selected region"))
+          (progn
+            (indent-buffer)
+            (message "Indented Buffer.")))
+        (whitespace-cleanup))))
 
-(defun indent-region-or-buffer ()
-  "Indent a region if selected, otherwise the whole buffer."
-  (interactive)
-  (unless (member major-mode prelude-indent-sensitive-modes)
-	(save-excursion
-	  (if (region-active-p)
-		  (progn
-			(indent-region (region-beginning) (region-end))
-			(message "Indented selected region"))
-		(progn
-		  (indent-buffer)
-		  (message "Indented Buffer.")))
-	  (whitespace-cleanup))))
+  (defun kill-default-buffer ()
+    "Kill the currently active buffer -- set to C-x so that users are not asked which buffer they want to kill."
+    (interactive)
+    (let (kill-buffer-query-functions) (kill-buffer)))
 
-(global-set-key (kbd "C-c i") 'indent-region-or-buffer)
+  ;;smart openline
+  (defun prelude-smart-open-line (arg)
+    "Insert an empty line after the current line.
+   Position the cursor at its beginning, according to the current mode
+   With a prefix ARG open line above the current line."
+    (interactive "P")
+    (if arg
+        (prelude-smart-open-line-above)
+      (progn
+        (move-end-of-line nil)
+        (newline-and-indent))))
 
-(defun kill-default-buffer ()
-  "Kill the currently active buffer -- set to C-x so that users are not asked which buffer they want to kill."
-  (interactive)
-  (let (kill-buffer-query-functions) (kill-buffer)))
-
-(global-set-key (kbd "C-x k") 'kill-default-buffer)
-
-;;smart openline
-(defun prelude-smart-open-line (arg)
-  "Insert an empty line after the current line.
- Position the cursor at its beginning, according to the current mode
- With a prefix ARG open line above the current line."
-  (interactive "P")
-  (if arg
-	  (prelude-smart-open-line-above)
-	(progn
-	  (move-end-of-line nil)
-	  (newline-and-indent))))
-(global-set-key (kbd "C-o") 'prelude-smart-open-line)
-
+;; [#keybinding]
+  (global-set-key (kbd "C-c i") 'indent-region-or-buffer)
+  (global-set-key (kbd "C-x k") 'kill-default-buffer)
+  (global-set-key (kbd "C-o") 'prelude-smart-open-line)
 
 #+END_SRC
 
@@ -658,7 +645,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 **** Smart parens
-
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: smartparens-config
 (require 'smartparens-config)
@@ -668,7 +654,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (sp-use-smartparens-bindings)
 (show-smartparens-global-mode +1)
 (smartparens-global-mode 1)
-
 
 ;; whenr press RET, the curly braces automatically
 ;; add another newline
@@ -682,24 +667,20 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 **** Revert Mode - para quando merda acontece
-
-#+begin-src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (global-auto-revert-mode)
 #+END_SRC
 **** Highlight current line
-
 #+BEGIN_SRC emacs-lisp
 (global-hl-line-mode)
 #+END_SRC
 **** Multiples cursors
-
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: multiple-cursors
 (require 'multiple-cursors)
 #+END_SRC
-
-**** Typing speed
-
+**** :OFF: Typing speed
+	 :OFF: because it`s pretty lame `
 #+BEGIN_SRC emacs-lisp
 (require 'speed-type)
 #+END_SRC
@@ -715,7 +696,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (add-to-list 'auto-mode-alist  '("\\.md\\'" . markdown-mode))
 #+END_SRC
 **** Ispell + Abbrev
-
 #+BEGIN_SRC emacs-lisp
 ;; snippet found in: http://endlessparentheses.com/ispell-and-abbrev-the-perfect-auto-correct.html
 (define-key ctl-x-map "\C-i"
@@ -768,16 +748,19 @@ abort completely with `C-g'."
 (require 'hungry-delete)
 (global-hungry-delete-mode)
 #+END_SRC
-**** Beacon - find your damn cursor
+**** :OFF: Beacon - find your damn cursor
+
+	 :OFF: good idea but i never used
 #+BEGIN_SRC emacs-lisp
 ;; this help alot in big monitors
 (require 'beacon)
 (setq beacon-push-mark 35)
-(setq beacon-color "#666600")
+(beacon-mode 1)
 #+END_SRC
 
 **** Fast searching with Swiper (helm backend)
 #+BEGIN_SRC emacs-lisp
+;; [#keybinding]
   (global-set-key "\C-r" 'swiper)
   (global-set-key "\C-s" 'swiper)
 #+END_SRC
@@ -793,34 +776,27 @@ abort completely with `C-g'."
 (add-to-list 'find-file-not-found-functions #'my-create-non-existent-directory)
 
 #+END_SRC
-
-**** Align by whitespace
-#+BEGIN_SRC emacs-lisp
-(defun bjm/align-whitespace (start end)
-  "Align columns by whitespace"
-  (interactive "r")
-  (align-regexp start end
-                "\\(\\s-*\\)\\s-" 1 0 t))
-#+END_SRC
 *** Buffers
 **** Scratch Buffer
 #+BEGIN_SRC emacs-lisp
-;; persistent-scratch
+;; persistent-scratch, things i put in scratch buffer will remain to the ends of time
 (use-package persistent-scratch
   :config
   (persistent-scratch-setup-default))
 #+END_SRC
 
 *** Theming and visual configuration
-**** Fonts and smooth scroll
-
 #+BEGIN_SRC emacs-lisp
-(set-frame-font  "inconsolata-12")
+;; breadcrumb to help find bugs
+(message "%s" "[init file]Setting emacs theming and fonts")
+#+END_SRC
+**** Fonts and smooth scroll
+#+BEGIN_SRC emacs-lisp
+(set-frame-font  "inconsolata-13")
 ;; scrolling to always be a line at a time
 (setq scroll-conservatively 10000)
 #+END_SRC
 **** frame title and flymake highlight
-
 #+BEGIN_SRC emacs-lisp
 ;; Frame Title Bar with full path of file
 (setq-default
@@ -835,7 +811,6 @@ abort completely with `C-g'."
  '(flymake-errline ((((class color)) (:underline "red"))))
  '(flymake-warnline ((((class color)) (:underline "yellow")))))
 #+END_SRC
-
 **** Font Lock for keywords
 
 #+BEGIN_SRC emacs-lisp
@@ -847,7 +822,7 @@ font-lock-warning-face t)))))
 
 #+END_SRC
 
-**** Colors, a lot of colors
+**** Colors/Theme, a lot of colors
 #+BEGIN_SRC emacs-lisp
 ;; i really dont know why i doing this add-to-list again
 (add-to-list 'custom-theme-load-path "/home/mvjunq/.emacs.d/elpa")

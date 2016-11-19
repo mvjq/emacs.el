@@ -10,13 +10,14 @@ Atencao, utilizo org-babel-load para *programacao literaria*.
 * TODOs:
   - [x] Emacs.org on github
   - [x] end portunhol
-  - [ ] folders and dependency files on github (load-package???)
-  - [ ] new directory structure
-  - [ ] use-require everywhere
+  - [ ] use-package everywhere
+  - [ ] better lisp dialects modes (clojure/scheme/commonlisp)
+  - [ ] a better python worfklow
   - [ ] make init fast (or faster)
-
-
-things to see:
-  - https://github.com/edvorg/req-package
-  - https://github.com/coldnew/org-ioslide
-  - https://github.com/mrkkrp/vimish-fold
+  ----- [x] toying with the emacs gc and jit
+  ----- [ ] emacs server?
+  ----- [ ] putting the entire emacs file in ram?
+  - [ ] folders and dependency files on github (move everything out of
+    elpa directory?)
+     - worth the effort???
+  - [ ] new directory structure
