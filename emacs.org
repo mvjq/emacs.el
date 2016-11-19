@@ -17,9 +17,9 @@
 **** Loading path and dirs
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/lisp")  ;;  all things lisp
-(add-to-list 'load-path "~/.emacs.d/lisp/code")
-(add-to-list 'load-path "~/.emacs.d/lisp/misc")
-(add-to-list 'load-path "~/.emacs.d/lisp/misc/use-package")
+(add-to-list 'load-path "~/.emacs.d/lisp/code") ;; all things code
+(add-to-list 'load-path "~/.emacs.d/lisp/misc") ;; misc things
+(add-to-list 'load-path "~/.emacs.d/lisp/misc/use-package") ;; for use package
 (require 'use-package)
 (require 'eieio) ;; because of a bug in helm-dash
 #+END_SRC
