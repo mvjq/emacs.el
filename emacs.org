@@ -75,7 +75,6 @@
 
 ;; PACKAGE: semantic-mode
 ;; loading semantic for helm-semantic-imenu (amazing with c code)
-(semantic-mode 1)
 (add-to-list 'load-path "~/.emacs.d/elpa/helm")
 (add-to-list 'load-path "~/.emacs.d/lisp/helm/emacs-async")
 
@@ -636,8 +635,8 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 
-**** yank highlight :OFF:
-
+**** :OFF: yank highlight
+	  :OFF: its broken
 #+BEGIN_SRC emacs-lisp
 ;; Package for when you yank (paste) something, the yanked (pasted) region will be highlighted
 ;;(require 'volatile-highlights)
@@ -749,13 +748,12 @@ abort completely with `C-g'."
 (global-hungry-delete-mode)
 #+END_SRC
 **** :OFF: Beacon - find your damn cursor
-
 	 :OFF: good idea but i never used
 #+BEGIN_SRC emacs-lisp
 ;; this help alot in big monitors
-(require 'beacon)
-(setq beacon-push-mark 35)
-(beacon-mode 1)
+;;(require 'beacon)
+;;(setq beacon-push-mark 35)
+;;(beacon-mode 1)
 #+END_SRC
 
 **** Fast searching with Swiper (helm backend)
@@ -806,7 +804,7 @@ abort completely with `C-g'."
 				  (revert-buffer-function " %b"
 							  ("%b - dir: " default-directory)))))))
 
-;; cores que os erros do flymake vao aparecer
+;; colors used by flymake error and warn line
 (custom-set-faces
  '(flymake-errline ((((class color)) (:underline "red"))))
  '(flymake-warnline ((((class color)) (:underline "yellow")))))
@@ -839,15 +837,15 @@ font-lock-warning-face t)))))
 
 *** Programming
 **** C/C++
-***** Compilação
+***** Compilation
 #+BEGIN_SRC emacs-lisp
+
 ;; PACKAGE: compile
-;; utiliza o makefile do diretório atual, caso não, cria um temporário
+;; uses the actual directory
 (require 'compile)
 ;; snippet found in http://endlessparentheses.com/better-compile-command.html
 ;; This gives a regular `compile-command' prompt.
 (define-key prog-mode-map [C-f5] #'compile)
-
 ;; This just compiles immediately.
 (define-key prog-mode-map [f5]
   #'endless/compile-please)
@@ -893,11 +891,9 @@ With a prefix argument, use comint-mode."
 							  (or (getenv "CPPFLAGS") "-DDEBUG=9")
 							  (or (getenv "CFLAGS") "-ansi -pedantic -Wall -g")
 				  file))))))
-
-
 #+END_SRC
 ***** ggtags
-	  ggtags, best sistema de tags
+	  ggtags, or ctags???
 #+BEGIN_SRC emacs-lisp
 ;; dired vai mostrar as tags
 	  (add-hook 'dired-mode-hook 'ggtags-mode)
@@ -912,16 +908,17 @@ With a prefix argument, use comint-mode."
 ;; gdb-many-windows (múltiplas janelas ao usar o gdb)
 (setq
  gdb-many-windows t
- gdb-show-main t                        ;non-nil means display souce file containing the main routine ate startup
- )
+ gdb-show-main t)                        ;non-nil means display souce file containing the main routine ate startup)
 #+END_SRC
 ***** Irony Mode - backend para autocomplete
 #+BEGIN_SRC emacs-lisp
+
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
 ;; replace the `completion-at-point' and `complete-symbol' bindings in
 ;; irony-mode's buffers by irony-mode's function
+
 (defun my-irony-mode-hook ()
   (define-key irony-mode-map [remap completion-at-point]
 	'irony-completion-at-point-async)
@@ -929,10 +926,12 @@ With a prefix argument, use comint-mode."
 	'irony-completion-at-point-async))
 (add-hook 'irony-mode-hook 'my-irony-mode-hook)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
 (eval-after-load 'company
   '(add-to-list 'company-backends 'company-irony))
 ;; (optional) adds CC special commands to 'company-begin-commands' in order to
 ;; trigger completion at interest places, such as after scope operator
+
 (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 (add-hook 'irony-mode-hook 'irony-eldoc)
 #+END_SRC
@@ -1047,14 +1046,14 @@ With a prefix argument, use comint-mode."
 #+END_SRC
 ***** Hooks
 #+BEGIN_SRC emacs-lisp
-;; por alguma razão, preciso configurar isto denovo para prog-mode
+;; now i use from every programming mode
 (add-hook 'prog-mode-hook
 			   (lambda ()
 				(font-lock-add-keywords nil
 				 '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
 #+END_SRC
 **** Emacs Lisp
-***** eldoc e rainbow delimiters (cores para delimitadoresx)
+***** eldoc and rainbow delimiters
 #+BEGIN_SRC emacs-lisp
   ;; PACKAGE: eldoc
   ;; helpdoc in minibuffer line
@@ -1073,7 +1072,7 @@ With a prefix argument, use comint-mode."
   (add-hook 'after-init-hook 'global-company-mode)
   (add-hook 'org-mode 'rainbow-delimiters-mode)
 #+END_SRC
-***** Pulando e procurando código
+**** Jumping and searching code
 	  <C-c .> = find-function-at-point
 	  <C-c f> = find-function
 #+BEGIN_SRC emacs-lisp
@@ -1082,17 +1081,15 @@ With a prefix argument, use comint-mode."
 #+END_SRC
 **** Python
 #+BEGIN_SRC emacs-lisp
-(package-initialize)
 (elpy-enable)
-
 ;; JEDI
-
 (use-package jedi
   :ensure t
   :init
   (add-hook 'python-mode-hook 'jedi:setup)
-  (add-hook 'python-mode-hook 'jedi:ac-setup))
-(setq jedi:complete-on-dot t)
+  (add-hook 'python-mode-hook 'jedi:ac-setup)
+  (setq jedi:complete-on-dot t))
+
 ;; for jedi backend
 (add-to-list 'company-backends 'company-jedi)
 (add-to-list 'company-backends '(company-jedi company-files))
@@ -1105,12 +1102,12 @@ With a prefix argument, use comint-mode."
 ;; pep8
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-
 #+END_SRC
 
-**** Haskell
+**** :OFF: Haskell
+	 :OFF: because i give up on haskell, lisp > haskell, nuff said.
 #+BEGIN_SRC emacs-lisp
-(setq haskell-font-lock-symbols t)
+;;(setq haskell-font-lock-symbols t)
 ;; still searching for the ideal haskell mode
 ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
 ;; (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
@@ -1193,27 +1190,22 @@ With a prefix argument, use comint-mode."
 #+BEGIN_SRC emacs-lisp
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 ;;(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
-;;(add-hook 'ruby-mode-hook #'aggressive-indent-mode)
-;;(add-hook 'cc'-mode-hook #'aggressive-indent-mode)
-
+;;(add-hook 'ruby-mode-hook #'aggressive-indent-mode) ;; dont use ruby mode too often (since 2009)
+;;(add-hook 'cc'-mode-hook #'aggressive-indent-mode) ;; brokes everyone mode which works on identation
 #+END_SRC
 
-**** Zeal ta no ponto (Y)
-
-	 Open Zeal with the thing at point obs: DONT WORK, just open zeal
-	 (still cool btw)
+**** Zeal on point
+	 Zeal is cool, Zeal is nice (but very slow)
 #+BEGIN_SRC emacs-lisp
 (global-set-key "\C-cd" 'zeal-at-point)
 #+END_SRC
 **** Yasnippet
-
 #+begin_src emacs-lisp
 ;; PACKAGE: yasnippet
 ;; yet another snippet mode
 (yas-global-mode 1)
 #+END_SRC
 **** Fycheck
-
 	 Flycheck - syntax checking on background
 #+BEGIN_SRC emacs-lisp
 (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -1227,8 +1219,7 @@ With a prefix argument, use comint-mode."
   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
 #+END_SRC
-****** Flycheck e helm (eu odeio tooltips)
-
+****** Flycheck e helm (i hate tooltips)
 #+BEGIN_SRC emacs-lisp
 (require 'helm-flycheck) ;; Not necessary if using ELPA package
 (eval-after-load 'flycheck
@@ -1254,17 +1245,16 @@ With a prefix argument, use comint-mode."
 	  *Código abaixo não faz sentido em não funcionar*
 
 	  (require 'color)
-	  (let ((bg (face-attribute 'default :background)))
-	  (custom-set-faces
+	  let ((bg (face-attribute 'default :background)))
+	  custom-set-faces
 	  `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
 	  `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
 	  `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
 	  `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-	  `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+	  `company-tooltip-common (t (:inherit font-lock-constant-face))
 
 **** Semantic Mode
-
-	 Code completion baseada no buffer atual
+	 Code completion on actual buffer
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: semantic and cc-mode
 (require 'cc-mode)
@@ -1282,11 +1272,10 @@ With a prefix argument, use comint-mode."
 #+END_SRC
 
 **** Whitespace
-#+begin-src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 	 (add-hook 'prog-mode-hook (lambda () (interactive) (setq
 	 show-trailing-whitespace 1)))
 	 ;;active whitespace mode to view all whitespace characters
-
 	 (global-set-key (kbd "C-c w") 'whitespace-mode)
 #+END_SRC
 **** Tab para autocomplete
@@ -1295,6 +1284,7 @@ With a prefix argument, use comint-mode."
 #+END_SRC
 
 **** :OFF: Counsel-Dash
+	 :OFF: because i prefel zeal at point
 #+BEGIN_SRC emacs-lisp
 ;;; PACKAGE: counsel-dash
 ;;; see dash docsets with counsel (helm)
@@ -1302,6 +1292,7 @@ With a prefix argument, use comint-mode."
 #+END_SRC
 
 **** :OFF: Projectile
+	 :OFF: it's a beast, i need to learn how to manage a project.
 #+BEGIN_SRC emacs-lisp
 ;;(projectile-global-mode)
 ;;(setq projectile-enable-caching t)
@@ -1335,7 +1326,7 @@ With a prefix argument, use comint-mode."
 **** Move to
 
 #+BEGIN_SRC emacs-lisp
-(defun sacha/smarter-move-beginning-of-line (arg)
+   (defun sacha/smarter-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
 
 Move point to the first non-whitespace character on this line.
@@ -1366,27 +1357,27 @@ point reaches the beginning or end of the buffer, stop there."
 **** fast navigation with <C+Shift+_>
 
 #+BEGIN_SRC emacs-lisp
-;; KEYBINDINGS :TODO: move to a better place (file??)
- ;; Move more quickly
-(global-set-key (kbd "C-S-n")
-				(lambda ()
-				  (interactive)
-				  (ignore-errors (next-line 5))))
+  ;; KEYBINDINGS :TODO: move to a better place (file??)
+   ;; Move more quickly
+  (global-set-key (kbd "C-S-n")
+                  (lambda ()
+                    (interactive)
+                    (ignore-errors (next-line 5))))
 
-(global-set-key (kbd "C-S-p")
-				(lambda ()
-				  (interactive)
-				  (ignore-errors (previous-line 5))))
+  (global-set-key (kbd "C-S-p")
+                  (lambda ()
+                    (interactive)
+                    (ignore-errors (previous-line 5))))
 
-(global-set-key (kbd "C-S-f")
-				(lambda ()
-				  (interactive)
-				  (ignore-errors (forward-char 5))))
+  (global-set-key (kbd "C-S-f")
+                  (lambda ()
+                    (interactive)
+                    (ignore-errors (forward-char 5))))
 
-(global-set-key (kbd "C-S-b")
-				(lambda ()
-				  (interactive)
-				  (ignore-errors (backward-char 5))))
+  (global-set-key (kbd "C-S-b")
+                  (lambda ()
+                    (interactive)
+                    (ignore-errors (backward-char 5))))
 #+END_SRC
 **** Pop to mark
 	 from: Sasha.org config file
@@ -1396,14 +1387,12 @@ point reaches the beginning or end of the buffer, stop there."
 	 (setq set-mark-command-repeat-pop t)
 	 #+END_SRC
 **** Which Key mode
-
 	 Show commands after a certain key is used
 #+BEGIN_SRC emacs-lisp
 ;;PACKAGE: which-key mode
 (which-key-mode)
 #+END_SRC
 **** Help - guide key
-
 	 from: sasha.org config file
  #+BEGIN_SRC emacs-lisp
  (use-package guide-key
@@ -1538,9 +1527,7 @@ point reaches the beginning or end of the buffer, stop there."
 		 (list (line-beginning-position)
 			   (line-beginning-position 2)))))
 #+END_SRC
-
 *** Emacs Debugging
-
 #+BEGIN_SRC emacs-lisp
 ;; configure trace on init file errors
 (setq edebug-trace t)
@@ -1559,7 +1546,6 @@ point reaches the beginning or end of the buffer, stop there."
 			nil
 			t))
 (add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
-
 
 (defun indent-whole-buffer ()
   "indent whole buffer"
