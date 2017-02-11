@@ -2,14 +2,12 @@
 
 *TIPS*:
  - Use <C-c '> to eval the source block
- - Use =M-x package-refresh-contents= to refresh the package list
  - <l + TAB: opens a latex block
  - <s + TAB: opens a source code block
  - <q + TAB: opens a quotation block
-
 * Configuration
 *** Initialization
-**** Personal infon
+**** Personal info
 	 Setting email and full name
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "M. Vinicius Junqueira"
@@ -22,20 +20,23 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/misc") ;; misc things
 (add-to-list 'load-path "~/.emacs.d/lisp/misc/use-package") ;; for use package
 (require 'use-package)
-(require 'eieio) ;; because of a bug in helm-dash
 #+END_SRC
-
 **** Package System
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(add-to-list 'package-archives
-			 '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-(setq package-enable-at-startup nil)
-(package-initialize)
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (setq package-enable-at-startup nil)
+  (package-initialize)
 #+END_SRC
 
 *** General Configuration
+**** Scratch
+#+BEGIN_SRC emacs-lisp
+(setq initial-major-mode 'org-mode)
+#+END_SRC
+
 **** Backup
 #+BEGIN_SRC emacs-lisp
   (setq make-backup-files t ;; yep for backup
@@ -169,8 +170,7 @@
  helm-gtags-pulse-at-cursor t
  helm-gtags-pulse-at-cursor t
  helm-gtags-prefix-key "\C-c g"
- helm-gtags-suggested-key-mapping t
- )
+ helm-gtags-suggested-key-mapping t)
 
 (require 'helm-gtags)
 ;; enable helm-gtags in various modes
@@ -216,7 +216,6 @@
 (global-visual-line-mode 1)
 (display-time)
 (display-battery-mode 1)
-
 (size-indication-mode 1)
 (column-number-mode 1)
 (line-number-mode 1)
@@ -225,9 +224,8 @@
 ;; powering the mode line with spacemacs theme
 (add-to-list 'load-path "~/.emacs.d/lisp/spaceline")
 (require 'spaceline-config)
+(require 'powerline)
 (spaceline-spacemacs-theme)
-;(require 'powerline)
-;(powerline-vim-theme)
 #+END_SRC
 
 **** Recentf: remember last visited files
@@ -236,7 +234,7 @@
 (require 'recentf)
 (setq recentf-max-saved-items 200
 	  recentf-max-menu-items 15)
-;;(global-set-key "\C-c\ \C-r" 'recentf-open-files) ;; BINDING-KEY
+;(global-set-key "\C-c\ \C-r" 'recentf-open-files) ;; BINDING-KEY
 (recentf-mode)
 #+END_SRC
 
@@ -248,9 +246,7 @@
 (defalias 'evb 'eval-buffer)
 (defalias 'evr 'eval-region)
 #+END_SRC
-
 **** Buffer Editing
-
 #+BEGIN_SRC emacs-lisp
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -262,8 +258,6 @@
 ;; ibuffer everywhere
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (setq ibuffer-use-other-window t) ;; always display ibuffer in another window
-
-
 (add-hook 'ibuffer-hook
 	  (lambda ()
 		(ibuffer-vc-set-filter-groups-by-vc-root)
@@ -355,7 +349,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: eletric-pair.mode
 ;; Auto-complete of symbols like (), {}, []
-(electric-pair-mode 1) ;; novo auto pair
+;(electric-pair-mode 1) ;; novo auto pair
 ;; make electric-pair-mode work on more brackets
 (setq electric-pair-pairs '(
 							(?\" . ?\")
@@ -383,9 +377,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 ;; hippie-expand is as better version of dabbrev-expand.
 ;; While dabbrev-expand searches fo words you already types, in current;; buffers and others buffer , hippie-expands includes more sources.
 ;; such as filenames. kill ring...
-
 (global-set-key (kbd "M-/") 'hippie-expand) ;; replace dabbrev-expand
-
 (setq
  hippie-expand-try-functions-list
  '(try-expand-dabbrev ;; try to expand word dynamically, searching the current buffer.
@@ -397,13 +389,11 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
    try-expand-list ;; try to coimplete the cuyrrent line to an entire line in the buffer
    try-expand-line ;; try to complete teh current line to an entire line in the buffer
    try-complete-lisp-symbol-partially ;; try to coimplete as an emacs lisp symbol,
-   try-complete-lisp-symbol)
-)
+   try-complete-lisp-symbol))
 
 (require 'expand-region)
 (global-key-binding (kbd "M-m") 'er/expand-region)
 #+END_SRC
-
 **** Undo Tree
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: undo-tree
@@ -418,7 +408,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 	  (setq undo-tree-visualizer-diff t)))
 #+END_SRC
 **** Terminal Configuration
-
 #+BEGIN_SRC emacs-lisp
 (add-hook 'term-mode-hook       ;because of autopair
   #'(lambda () (setq autopair-dont-activate t)))
@@ -452,7 +441,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 	(setq mode-name "fill"))))
 #+END_SRC
 **** Highlight ()
-
 #+BEGIN_SRC emacs-lisp
 	 (add-hook 'highlight-parentheses-mode-hook
 		  '(lambda ()
@@ -473,9 +461,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 **** CTags
 #+BEGIN_SRC emacs-lisp
-
  (setq path-to-ctags "/usr/bin/ctags"); <-- your ctags path here
-
   (defun create-tags (dir-name)
 	 "Create tags file."
 	 (interactive "DDirectory: ")
@@ -502,9 +488,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   (let ((tags-revert-without-query t))  ; don't query, revert silently
 	(visit-tags-table default-directory nil)))
 #+END_SRC
-
 **** Visual Bookmarks using mouse
-
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: bm
 ;; visual bookmarks
@@ -532,6 +516,21 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (setq desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\|KILL\\)")
 (setq desktop-restore-frames nil)
 #+END_SRC
+**** goodbye, suspend fucking frame
+#+BEGIN_SRC emacs-lisp
+
+(global-unset-key (kbd "C-z"))
+
+(global-set-key (kbd "C-z C-z") 'my-suspend-frame)
+
+(defun my-suspend-frame ()
+  "In a GUI environment, do nothing; otherwise `suspend-frame'."
+  (interactive)
+  (if (display-graphic-p)
+      (message "suspend-frame disabled for graphical displays.")
+    (suspend-frame)))
+#+END_SRC
+
 *** Editing file
 **** Searching
 #+BEGIN_SRC emacs-lisp
@@ -634,7 +633,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   (global-set-key (kbd "C-o") 'prelude-smart-open-line)
 
 #+END_SRC
-
+sda
 **** :OFF: yank highlight
 	  :OFF: its broken
 #+BEGIN_SRC emacs-lisp
@@ -675,8 +674,10 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 **** Multiples cursors
 #+BEGIN_SRC emacs-lisp
-;; PACKAGE: multiple-cursors
+;; PACKAGE: multiple-cursors with mouse-
 (require 'multiple-cursors)
+(global-unset-key (kbd "M-<down-mouse-1>"))
+(global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
 #+END_SRC
 **** :OFF: Typing speed
 	 :OFF: because it`s pretty lame `
@@ -757,6 +758,7 @@ abort completely with `C-g'."
 #+END_SRC
 
 **** Fast searching with Swiper (helm backend)
+	 Uses swiper instead of isearch
 #+BEGIN_SRC emacs-lisp
 ;; [#keybinding]
   (global-set-key "\C-r" 'swiper)
@@ -782,7 +784,6 @@ abort completely with `C-g'."
   :config
   (persistent-scratch-setup-default))
 #+END_SRC
-
 *** Theming and visual configuration
 #+BEGIN_SRC emacs-lisp
 ;; breadcrumb to help find bugs
@@ -790,7 +791,7 @@ abort completely with `C-g'."
 #+END_SRC
 **** Fonts and smooth scroll
 #+BEGIN_SRC emacs-lisp
-(set-frame-font  "inconsolata-13")
+(set-frame-font  "inconsolata-14")
 ;; scrolling to always be a line at a time
 (setq scroll-conservatively 10000)
 #+END_SRC
@@ -834,7 +835,6 @@ font-lock-warning-face t)))))
 #+BEGIN_SRC emacs-lisp
 (set-cursor-color "#c75100")
 #+END_SRC
-
 *** Programming
 **** C/C++
 ***** Compilation
@@ -892,16 +892,18 @@ With a prefix argument, use comint-mode."
 							  (or (getenv "CFLAGS") "-ansi -pedantic -Wall -g")
 				  file))))))
 #+END_SRC
-***** ggtags
+***** ggtags :OFF:
+
+	  off because of a error in minor mode with org mode
 	  ggtags, or ctags???
-#+BEGIN_SRC emacs-lisp
++BEGIN_SRC emacs-lisp
 ;; dired vai mostrar as tags
 	  (add-hook 'dired-mode-hook 'ggtags-mode)
 	  (add-hook 'c-mode-common-hook
 	  (lambda ()
 	  (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
 	  (ggtags-mode 1))))
-#+END_SRC
++END_SRC
 
 ***** GDB - gnu debugger, (quase best) debugger (oi slime)
 #+BEGIN_SRC emacs-lisp
@@ -973,35 +975,6 @@ With a prefix argument, use comint-mode."
 (add-to-list 'load-path "elpa/c-eldoc")
 (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
 #+END_SRC
-***** :OFF: company-c-headers (auto complete para cabeçalhos)
-
-#+BEGIN_SRC emacs-lisp
-;;(add-to-list 'company-backends 'company-c-headers)
-;;(add-to-list 'company-c-headers-path-user "/usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/../../../../include/c++/5.3.0")
-;;(add-to-list 'company-c-headers-path-userm "/usr/include/")
-;;(add-to-list 'company-c-headers-path-user "/usr/include/c++")
-#+END_SRC
-
-***** :OFF: Helm-dash
-	  Dash do mac sabe? Agora no emacs
-	  obs:não funciona por algum motivo referente a instalação
-#+BEGIN_SRC emacs-lisp
-;;  (use-package helm-dash
-;;   :ensure t
-;;   :bind (("C-c D" . helm-dash))
-;;   :init
-;;   (setq helm-dash-common-docsets '("ElasticSearch")
-;;         helm-dash-min-length 2)
-;;   :config
-;;   (defun eos/use-java-docset ()
-;;     (setq-local helm-dash-docsets '("Java")))
-;;   (defun eos/use-elisp-docset ()
-;;     (setq-local helm-dash-docsets '("Emacs Lisp")))
-;;   (add-hook 'java-mode-hook #'eos/use-java-docset)
-;;  (add-hook 'emacs-lisp-mode-hook #'eos/use-elisp-docset))
-
-
-#+END_SRC
 ***** Auto Complete com backend do irony+company
 #+BEGIN_SRC emacs-lisp
 ;; (optional) adds CC special commands to `company-begin-commands' in order to
@@ -1035,6 +1008,14 @@ With a prefix argument, use comint-mode."
 (semantic-add-system-include "~/linux/include")
 (semantic-mode 1)
 #+END_SRC
+***** Hooks
+#+BEGIN_SRC emacs-lisp
+;; now i use from every programming mode
+(add-hook 'prog-mode-hook
+			   (lambda ()
+				(font-lock-add-keywords nil
+				 '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
+#+END_SRC
 ***** :OFF: Functions args (tooptip for include headers in /usr/include)
 #+BEGIN_SRC emacs-lisp
 ;;(fa-config-default)
@@ -1044,14 +1025,37 @@ With a prefix argument, use comint-mode."
 ;;(define-key c-mode-map (kbd "M-o")  'fa-show)
 ;;(define-key c++-mode-map (kbd "M-o")  'fa-show)
 #+END_SRC
-***** Hooks
+***** :OFF: company-c-headers (auto complete para cabeçalhos)
+
 #+BEGIN_SRC emacs-lisp
-;; now i use from every programming mode
-(add-hook 'prog-mode-hook
-			   (lambda ()
-				(font-lock-add-keywords nil
-				 '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
+;;(add-to-list 'company-backends 'company-c-headers)
+;;(add-to-list 'company-c-headers-path-user "/usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/../../../../include/c++/5.3.0")
+;;(add-to-list 'company-c-headers-path-userm "/usr/include/")
+;;(add-to-list 'company-c-headers-path-user "/usr/include/c++")
 #+END_SRC
+
+***** :OFF: Helm-dash
+	  Dash do mac sabe? Agora no emacs
+	  obs:não funciona por algum motivo referente a instalação
+#+BEGIN_SRC emacs-lisp
+;;	(require 'eieio) ;; because of a bug in helm-dash
+;;  (use-package helm-dash
+;;   :ensure t
+;;   :bind (("C-c D" . helm-dash))
+;;   :init
+;;   (setq helm-dash-common-docsets '("ElasticSearch")
+;;         helm-dash-min-length 2)
+;;   :config
+;;   (defun eos/use-java-docset ()
+;;     (setq-local helm-dash-docsets '("Java")))
+;;   (defun eos/use-elisp-docset ()
+;;     (setq-local helm-dash-docsets '("Emacs Lisp")))
+;;   (add-hook 'java-mode-hook #'eos/use-java-docset)
+;;  (add-hook 'emacs-lisp-mode-hook #'eos/use-elisp-docset))
+
+
+#+END_SRC
+
 **** Emacs Lisp
 ***** eldoc and rainbow delimiters
 #+BEGIN_SRC emacs-lisp
@@ -1081,7 +1085,6 @@ With a prefix argument, use comint-mode."
 #+END_SRC
 **** Python
 #+BEGIN_SRC emacs-lisp
-(elpy-enable)
 ;; JEDI
 (use-package jedi
   :ensure t
@@ -1089,7 +1092,11 @@ With a prefix argument, use comint-mode."
   (add-hook 'python-mode-hook 'jedi:setup)
   (add-hook 'python-mode-hook 'jedi:ac-setup)
   (setq jedi:complete-on-dot t))
-
+;; elpy is cool
+(use-package elpy
+:ensure t
+:config
+(elpy-enable))
 ;; for jedi backend
 (add-to-list 'company-backends 'company-jedi)
 (add-to-list 'company-backends '(company-jedi company-files))
@@ -1103,34 +1110,6 @@ With a prefix argument, use comint-mode."
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 #+END_SRC
-
-**** :OFF: Haskell
-	 :OFF: because i give up on haskell, lisp > haskell, nuff said.
-#+BEGIN_SRC emacs-lisp
-;;(setq haskell-font-lock-symbols t)
-;; still searching for the ideal haskell mode
-;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
-;; (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-;; (add-hook 'haskell-mode-hook 'haskell-decl-scan-mode)
-;; (add-hook 'haskell-mode-hook #'hindent-mode)
-;; using cabal, stack for another time
-;; (setq haskell-process-type 'stack-ghci)
-;; (setq haskell-process-path-ghci "stack")
-;; (setq haskell-process-args-ghci "ghci")
-;; (autoload 'ghc-init "ghc" nil t)
-;; (autoload 'ghc-debug "ghc" nil t)
-;; (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-;; (require 'flycheck)
-;; (require 'flycheck-haskell)
-;; (add-hook 'haskell-mode-hook 'flycheck-mode)
-;; (add-hook 'flycheck-mode-hook 'flycheck-haskell-configure)
-;; (require 'company)
-;; (require 'company-ghci)
-;; (push 'company-ghci company-backends)
-;; (add-hook 'haskell-mode-hook 'company-mode)
-#+END_SRC
-
 ***** Hasktags
 	  Use the M-. luke11
 #+BEGIN_SRC emacs-lisp
@@ -1208,16 +1187,18 @@ With a prefix argument, use comint-mode."
 **** Fycheck
 	 Flycheck - syntax checking on background
 #+BEGIN_SRC emacs-lisp
-(add-hook 'after-init-hook #'global-flycheck-mode)
-;; using tooltip
-(eval-after-load 'flycheck
-  '(custom-set-variables
-   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
-(add-hook 'c-mode-hook 'flycheck-mode)
-(add-hook 'c++-mode-hook 'flycheck-mode)
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-(setq flycheck-check-syntax-automatically '(mode-enabled save))
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  ;; using tooltip
+  (eval-after-load 'flycheck
+    '(custom-set-variables
+     '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+  (with-eval-after-load 'flycheck
+    (flycheck-pos-tip-mode))
+  (add-hook 'c-mode-hook 'flycheck-mode)
+  (add-hook 'c++-mode-hook 'flycheck-mode)
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+  (setq flycheck-check-syntax-automatically '(mode-enabled save))
 #+END_SRC
 ****** Flycheck e helm (i hate tooltips)
 #+BEGIN_SRC emacs-lisp
@@ -1282,7 +1263,6 @@ With a prefix argument, use comint-mode."
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent 'complete)
 #+END_SRC
-
 **** :OFF: Counsel-Dash
 	 :OFF: because i prefel zeal at point
 #+BEGIN_SRC emacs-lisp
@@ -1298,30 +1278,31 @@ With a prefix argument, use comint-mode."
 ;;(setq projectile-enable-caching t)
 #+END_SRC
 
+**** :OFF: Haskell
+	 not yet, sorry
 *** Hooks
 #+BEGIN_SRC emacs-lisp
 (add-hook 'before-save-hook 'delete-trailing-whitespace) ;; remove the dreadful trailing whitespace
 (add-hook 'text-mode-hook 'turn-on-auto-fill) ;; text mode = best place for auto fill mode
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 #+END_SRC
-
 *** Keybindings and navigation
 **** Font size
 #+BEGIN_SRC emacs-lisp
 (bind-key "C-+" 'text-scale-increase)
 (bind-key "C--" 'text-scale-decrease)
 #+END_SRC
-**** Speedbar
+**** Speedbar :OFF:
 #+BEGIN_SRC emacs-lisp
-(add-hook 'speedbar--reconfigure-keymaps-hook
-	  '(lambda ()
-		 (define-key speedbar-key-map (kbd "<up>") 'speedbar-prev)
-		 (define-key speedbar-key-map (kbd "<down>") 'speedbar-next)
-		 (define-key speedbar-key-map (kbd "<right>") 'speedbar-expand-line)
-		 (define-key speedbar-key-map (kbd "<left>" ) 'speedbar-contract-line)
-		 (define-key speedbar-key-map (kbd "M-<up>" ) 'speedbar-up-directory)
-		 (define-key speedbar-key-map (kbd "<f5>") 'speedbar-refresh)))
-	 (setq speedbar-show-unknown-files t)
+;(add-hook 'speedbar--reconfigure-keymaps-hook
+;	  '(lambda ()
+;		 (define-key speedbar-key-map (kbd "<up>") 'speedbar-prev)
+;		 (define-key speedbar-key-map (kbd "<down>") 'speedbar-next)
+;		 (define-key speedbar-key-map (kbd "<right>") 'speedbar-expand-line)
+;		 (define-key speedbar-key-map (kbd "<left>" ) 'speedbar-contract-line)
+;		 (define-key speedbar-key-map (kbd "M-<up>" ) 'speedbar-up-directory)
+;		 (define-key speedbar-key-map (kbd "<f5>") 'speedbar-refresh)))
+;	 (setq speedbar-show-unknown-files t)
 #+END_SRC
 **** Move to
 
@@ -1354,15 +1335,20 @@ point reaches the beginning or end of the buffer, stop there."
 				'sacha/smarter-move-beginning-of-line)
 #+END_SRC
 
-**** fast navigation with <C+Shift+_>
+**** fast navigation with <C+Shift+_> and others
 
 #+BEGIN_SRC emacs-lisp
+
+(setq next-line-add-newlines t) ;; in end of file, add newline with C-n
+
   ;; KEYBINDINGS :TODO: move to a better place (file??)
    ;; Move more quickly
   (global-set-key (kbd "C-S-n")
                   (lambda ()
                     (interactive)
                     (ignore-errors (next-line 5))))
+
+
 
   (global-set-key (kbd "C-S-p")
                   (lambda ()
@@ -1373,7 +1359,6 @@ point reaches the beginning or end of the buffer, stop there."
                   (lambda ()
                     (interactive)
                     (ignore-errors (forward-char 5))))
-
   (global-set-key (kbd "C-S-b")
                   (lambda ()
                     (interactive)
@@ -1393,15 +1378,15 @@ point reaches the beginning or end of the buffer, stop there."
 (which-key-mode)
 #+END_SRC
 **** Help - guide key
-	 from: sasha.org config file
- #+BEGIN_SRC emacs-lisp
- (use-package guide-key
-  :diminish guide-key-mode
-  :init
-  (progn
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
-  (guide-key-mode 1)))  ; Enable guide-key-mode
- #+END_SRC
+	  from: sasha.org config file
+  #+BEGIN_SRC emacs-lisp
+  (use-package guide-key
+   :diminish guide-key-mode
+   :init
+   (progn
+   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+   (guide-key-mode 1)))  ; Enable guide-key-mode
+  #+END_SRC
 
 **** visible bookmarks (F2)
 #+BEGIN_SRC emacs-lisp
@@ -1439,8 +1424,55 @@ point reaches the beginning or end of the buffer, stop there."
       org-src-fontify-natively t
       org-src-tab-acts-natively t)
 #+END_SRC
-*** Defuns
+**** Org Agenda with google calendar					  :workinginprogress:
+	 #+BEGIN_SRC emacs-lisp
+       (setq org-agenda-files (list "~/Org/notes.org"
+                                    "~/Org/aulas.org") ;;synch file with google calendar)
+             ;; set key combos
+             (define-key global-map "\C-ca" 'org-agenda)
 
+             (require 'org-gcal)
+             (require 'calfw-org)
+             (setq org-gcal-client-id "55299990237-jt1fteac52937vv5i5aj9fq3ecqahs5a.apps.googleusercontent.com"
+                   org-gcal-client-secret "Sp6sPhS6tk2u3Hnq4BdxQ-na"
+                   org-gcal-file-alist '(("7apsb6f8561k83t5cbdrghhh9c@group.calendar.google.com" . "~/Org/aulas.org")
+                                         ("1b9f2n0a8vrrf5p0uk5p35b3vg@group.calendar.google.com" . "~/Org/usp.org")
+                                         ("8l7nuq21l3u8ivj9dd72en34rc@group.calendar.google.com" . "~/Org/provas.org")))
+
+
+             ;; defun para facilitar as coisas
+             (defun my-open-calendar ()
+               (interactive)
+               (cfw:open-calendar-buffer
+                :contents-sources
+                (list
+                 (cfw:org-create-source "Gold") )))
+
+             ;; for sync purpose
+             (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+             (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+
+	 #+END_SRC
+**** org capture, best way to use todo					  :workinginprogress:
+	 #+BEGIN_SRC emacs-lisp
+       (setq org-default-notes-file "~/Org/notes.org")
+       (define-key global-map "\C-cc" 'org-capture)
+
+                                               ; log done state in TODOS
+       (setq org-log-done t)
+
+
+                                               ; set org-capture templates
+       (setq org-capture-templates
+                       `(("t" "todo" entry (file+headline "~/Org/notes.org" "Task") ;; things i have to do but dont
+                          "** TODO %^{Task}")
+                       ("r" "read_log" entry (file+headline "~/Org/read_log.org" "Read") ;; for my reading log
+                          "** %U %^{Read}")
+                       ("c" "Code" entry (file+headline "~/Org/code.org" "Code and things") ;; for interest stuff when i code
+                          "** [%f] => %^{%?}")))
+
+#+END_SRC
+*** Defuns
 	Functions i found in the interwebs (sorry for not having the
 	source url).
 #+BEGIN_SRC emacs-lisp
@@ -1512,7 +1544,6 @@ point reaches the beginning or end of the buffer, stop there."
 ;;
 ;; slick copy
 ;;
-
 (defadvice kill-ring-save (before slick-copy activate compile)
 	  "When called interactively with no active region, copy a single line instead."
 	  (interactive
@@ -1520,7 +1551,7 @@ point reaches the beginning or end of the buffer, stop there."
 		 (message "Copied line")
 		 (list (line-beginning-position)
 			   (line-beginning-position 2)))))
-	(defadvice kill-region (before slick-cut activate compile)
+(defadvice kill-region (before slick-cut activate compile)
 	  "When called interactively with no active region, kill a single line instead."
 	  (interactive
 	   (if mark-active (list (region-beginning) (region-end))
@@ -1646,3 +1677,4 @@ That buffer should be current already."
 		(insert output)
 		(search-backward "ERROR!")))))
 #+END_SRC
+adsadasd
