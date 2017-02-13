@@ -18,10 +18,10 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/code") ;; all things code
 (add-to-list 'load-path "~/.emacs.d/lisp/misc") ;; misc things
 (add-to-list 'load-path "~/.emacs.d/lisp/misc/use-package") ;; for use package
-(require 'use-package)
 #+END_SRC
 **** Package System
 #+BEGIN_SRC emacs-lisp
+  (require 'use-package)
   (require 'package)
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -53,7 +53,6 @@
 #+begin_src emacs-lisp
   (global-font-lock-mode 1) ;font lock everywhere
 #+end_src
-
 **** History
 #+BEGIN_SRC emacs-lisp
 (setq savehist-file "~/.emacs.d/backup/savehist")
@@ -194,7 +193,6 @@
 (add-hook 'org-mode-hook (lambda () (linum-mode 0)))
 #+END_SRC
 **** Winner Mode - frame navigation
-
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: winner mode
 ;; windows history by C-c left (undo) or C-c right (redo)
@@ -202,10 +200,8 @@
    :ensure winner
    :init (winner-mode 1))
 #+END_SRC
-
 **** Modeline
 #+BEGIN_SRC emacs-lisp
-
 ;; things to show in the modeline
 (show-paren-mode 1)
 (global-visual-line-mode 1)
@@ -275,7 +271,6 @@
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: shell-pop.el
 ;; terminal popup (:
-
 (setq multi-term-program "/bin/zsh")
 (add-hook 'term-mode-hook
 		  (lambda ()
@@ -358,7 +353,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 **** Abbrevs
-
 #+BEGIN_SRC emacs-lisp
 (setq abbrev-file-name "~/.emacs.d/data/abbrev_defs") ;; database of abbrevs
 (setq abbrev-mode t
@@ -545,7 +539,6 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 	  )
 #+END_SRC
 **** Indentation e newline
-
 #+BEGIN_SRC emacs-lisp
 (setq c-default-style "linux";; linux style baby
 		c-basic-offset 4
@@ -772,10 +765,10 @@ abort completely with `C-g'."
 *** Buffers
 **** Scratch Buffer
 #+BEGIN_SRC emacs-lisp
-;; persistent-scratch, things i put in scratch buffer will remain to the ends of time
-(use-package persistent-scratch
-  :config
-  (persistent-scratch-setup-default))
+  ;; persistent-scratch, things i put in scratch buffer will remain to the ends of time
+  (use-package persistent-scratch
+	:config
+	(persistent-scratch-setup-default))
 #+END_SRC
 *** Theming and visual configuration
 #+BEGIN_SRC emacs-lisp
@@ -1256,7 +1249,6 @@ With a prefix argument, use comint-mode."
 **** :OFF: Counsel-Dash
 	 :OFF: because i prefel zeal at point
 #+BEGIN_SRC emacs-lisp
-   Tdf
   ;;; PACKAGE: counsel-dash
   ;;; see dash docsets with counsel (helm)
   ;;;(require 'counsel-dash)
@@ -1426,254 +1418,5 @@ point reaches the beginning or end of the buffer, stop there."
 **** Org Agenda with google calendar					  :workinginprogress:
 	 #+BEGIN_SRC emacs-lisp
        (setq org-agenda-files (list "~/Org/notes.org"
-                                    "~/Org/aulas.org") ;;synch file with google calendar)
-             ;; set key combos
-             (define-key global-map "\C-ca" 'org-agenda)
-
-             (require 'org-gcal)
-             (require 'calfw-org)
-             (setq org-gcal-client-id "55299990237-jt1fteac52937vv5i5aj9fq3ecqahs5a.apps.googleusercontent.com"
-                   org-gcal-client-secret "Sp6sPhS6tk2u3Hnq4BdxQ-na"
-                   org-gcal-file-alist '(("7apsb6f8561k83t5cbdrghhh9c@group.calendar.google.com" . "~/Org/aulas.org")
-                                         ("1b9f2n0a8vrrf5p0uk5p35b3vg@group.calendar.google.com" . "~/Org/usp.org")
-                                         ("8l7nuq21l3u8ivj9dd72en34rc@group.calendar.google.com" . "~/Org/provas.org")))
-
-
-             ;; defun para facilitar as coisas
-             (defun my-open-calendar ()
-               (interactive)
-               (cfw:open-calendar-buffer
-                :contents-sources
-                (list
-                 (cfw:org-create-source "Gold") )))
-
-             ;; for sync purpose
-             (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
-             (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
-
-	 #+END_SRC
-**** org capture, best way to use todo					  :workinginprogress:
-	 #+BEGIN_SRC emacs-lisp
-       (setq org-default-notes-file "~/Org/notes.org")
-       (define-key global-map "\C-cc" 'org-capture)
-
-                                               ; log done state in TODOS
-       (setq org-log-done t)
-
-
-                                               ; set org-capture templates
-       (setq org-capture-templates
-                       `(("t" "todo" entry (file+headline "~/Org/notes.org" "Task") ;; things i have to do but dont
-                          "** TODO %^{Task}")
-                       ("r" "read_log" entry (file+headline "~/Org/read_log.org" "Read") ;; for my reading log
-                          "** %U %^{Read}")
-                       ("c" "Code" entry (file+headline "~/Org/code.org" "Code and things") ;; for interest stuff when i code
-                          "** [%f] => %^{%?}")))
-
-#+END_SRC
-*** Defuns
-	Functions i found in the interwebs (sorry for not having the
-	source url).
-#+BEGIN_SRC emacs-lisp
-;; funcao parte da mensagem de erro no minibuffer
-(defun my-flymake-show-help ()
-   (when (get-char-property (point) 'flymake-overlay)
-	 (let ((help (get-char-property (point) 'help-echo)))
-	   (if help (message "%s" help)))))
-
-;; indent in whitespace (interative action)
-(defun indent-whitespace (beg end spaces)
-  "Indent region of code by N spaces"
-  (interactive "r\nnEnter number of spaces: \n")
-  (indent-code-rigidly beg end spaces))
-
-;; insert date, but <C-c .> is nice
-(defun insert-date ()
-  "insert date at point"
-  (interactive)
-  (insert (format-time-string "%a %Y-%m-%d - %l:%M %p")))
-
-;; for the old time sakes
-(defun ascii-table ()
-  "Print the ascii table. Based on a defun by Alex Schroeder <asc@bsiag.com>"
-  (interactive)
-  (switch-to-buffer "*ASCII*")
-  (erase-buffer)
-  (insert (format "ASCII characters up to number %d.\n" 254))
-  (let ((i 0))
-	(while (< i 254)
-	  (setq i (+ i 1))
-	  (insert (format "%4d %c\n" i i))))
-  (beginning-of-buffer))
-
-(defun eval-and-replace ()
-  "Replace the preceding sexp with its value."
-  (interactive)
-  (backward-kill-sexp)
-
-  (condition-case nil
-	  (prin1 (eval (read (current-kill 0)))
-			 (current-buffer))
-	(error (message "Invalid expression")
-		   (insert (current-kill 0)))))
-
-;; edit files like sudo
-(defun sudo-edit (&optional arg)
-  "do sudo things"
-  (interactive "p")
-  (if (or arg (not buffer-file-name))
-	  (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
-	(find-alternate-file (concat "/sudo:root@localhost": buffer-file-name))))
-
-(defun increase-font-size ()
-  (interactive)
-  (set-face-attribute 'default
-					  nil
-					  :height
-					  (ceiling (* 1.10
-								  (face-attribute 'default :height)))))
-(defun decrease-font-size ()
-  (interactive)
-  (set-face-attribute 'default
-					  nil
-					  :height
-					  (floor (* 0.9
-								(face-attribute 'default :height)))))
-
-;;
-;; slick copy
-;;
-(defadvice kill-ring-save (before slick-copy activate compile)
-	  "When called interactively with no active region, copy a single line instead."
-	  (interactive
-	   (if mark-active (list (region-beginning) (region-end))
-		 (message "Copied line")
-		 (list (line-beginning-position)
-			   (line-beginning-position 2)))))
-(defadvice kill-region (before slick-cut activate compile)
-	  "When called interactively with no active region, kill a single line instead."
-	  (interactive
-	   (if mark-active (list (region-beginning) (region-end))
-		 (list (line-beginning-position)
-			   (line-beginning-position 2)))))
-#+END_SRC
-*** Emacs Debugging
-#+BEGIN_SRC emacs-lisp
-;; configure trace on init file errors
-(setq edebug-trace t)
-
-;; byte compile init files
-(defun byte-compile-init-dir ()
-  "Byte-compile all your dotfiles."
-  (interactive)
-  (byte-recompile-directory user-emacs-directory 0))
-(defun remove-elc-on-save ()
-  "If you're saving an elisp file, likely the .elc is no longer valid."
-  (add-hook 'after-save-hook
-			(lambda ()
-			  (if (file-exists-p (concat buffer-file-name "c"))
-				  (delete-file (concat buffer-file-name "c"))))
-			nil
-			t))
-(add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
-
-(defun indent-whole-buffer ()
-  "indent whole buffer"
-  (interactive)
-  (delete-trailing-whitespace)
-  (indent-region (point-min) (point-max) nil)
-  (untabify (point-min) (point-max)))
-
-;; eval buffer (init file)
-;; found on interwebs
-(with-eval-after-load 'debug
-  (defun debugger-setup-buffer (debugger-args)
-	"Initialize the `*Backtrace*' buffer for entry to the debugger.
-That buffer should be current already."
-	(setq buffer-read-only nil)
-	(erase-buffer)
-	(set-buffer-multibyte t)        ;Why was it nil ?  -stef
-	(setq buffer-undo-list t)
-	(let ((standard-output (current-buffer))
-		  (print-escape-newlines t)
-		  (print-level 8)
-		  (print-length 50))
-	  (backtrace))
-	(goto-char (point-min))
-	(delete-region (point)
-				   (progn
-					 (search-forward "\n  debug(")
-					 (forward-line (if (eq (car debugger-args) 'debug)
-									   2    ; Remove implement-debug-on-entry frame.
-									 1))
-					 (point)))
-	(insert "Debugger entered")
-	;; lambda is for debug-on-call when a function call is next.
-	;; debug is for debug-on-entry function called.
-	(pcase (car debugger-args)
-	  ((or `lambda `debug)
-	   (insert "--entering a function:\n"))
-	  ;; Exiting a function.
-	  (`exit
-	   (insert "--returning value: ")
-	   (setq debugger-value (nth 1 debugger-args))
-	   (prin1 debugger-value (current-buffer))
-	   (insert ?\n)
-	   (delete-char 1)
-	   (insert ? )
-	   (beginning-of-line))
-	  ;; Debugger entered for an error.
-	  (`error
-	   (insert "--Lisp error: ")
-	   (prin1 (nth 1 debugger-args) (current-buffer))
-	   (insert ?\n))
-	  ;; debug-on-call, when the next thing is an eval.
-	  (`t
-	   (insert "--beginning evaluation of function call form:\n"))
-	  ;; User calls debug directly.
-	  (_
-	   (insert ": ")
-	   (prin1 (if (eq (car debugger-args) 'nil)
-				  (cdr debugger-args) debugger-args)
-			  (current-buffer))
-	   (insert ?\n)))
-	;; After any frame that uses eval-buffer,
-	;; insert a line that states the buffer position it's reading at.
-	(save-excursion
-	  (let ((tem eval-buffer-list))
-		(while (and tem
-					(re-search-forward "^  eval-\\(buffer\\|region\\)(" nil t))
-		  (beginning-of-line)
-		  (insert (format "Error at line %d in %s: "
-						  (with-current-buffer (car tem)
-							(line-number-at-pos (point)))
-						  (with-current-buffer (car tem)
-							(buffer-name))))
-		  (pop tem))))
-	(debugger-make-xrefs)))
-
-;; test config file without leaving emacs
-;; found on interwebs
-(defun test-emacs ()
-  (interactive)
-  (require 'async)
-  (async-start
-   (lambda () (shell-command-to-string
-		  "emacs --batch --eval \"
-(condition-case e
-	(progn
-	  (load \\\"~/.emacs\\\")
-	  (message \\\"-OK-\\\"))
-  (error
-   (message \\\"ERROR!\\\")
-   (signal (car e) (cdr e))))\""))
-   `(lambda (output)
-	  (if (string-match "-OK-" output)
-		  (when ,(called-interactively-p 'any)
-			(message "All is well"))
-		(switch-to-buffer-other-window "*startup error*")
-		(delete-region (point-min) (point-max))
-		(insert output)
-		(search-backward "ERROR!")))))
-#+END_SRC
-adsadasd
+                                    "~/Org/aulas.org"))
+             (define-key glob
