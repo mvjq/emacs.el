@@ -1,5 +1,4 @@
-* Emacs Org
-
+#+TITLE: Emacs.Org
 *TIPS*:
  - Use <C-c '> to eval the source block
  - <l + TAB: opens a latex block
@@ -32,7 +31,7 @@
 #+END_SRC
 
 *** General Configuration
-**** Scratch
+**** Org mode with Scratch
 #+BEGIN_SRC emacs-lisp
 (setq initial-major-mode 'org-mode)
 #+END_SRC
@@ -40,18 +39,14 @@
 **** Backup
 #+BEGIN_SRC emacs-lisp
   (setq make-backup-files t ;; yep for backup
-		backup-by-copying t ;;  backup though copying
-		backup-directory-alist '(("." . "~/.backup/emacs")) ;; backup directory
-		version-control t
-		kept-new-versions 2
-		kept-old-versions 4
-		delete-old-versions -1
-		vc-make-backup-files t)
+        backup-by-copying t ;;  backup though copying
+        backup-directory-alist '(("." . "~/.backup/emacs")) ;; backup directory
+        version-control t
+        kept-new-versions 2
+        kept-old-versions 4
+        delete-old-versions -1
+        vc-make-backup-files t)
 
-  ;; PACKAGE: saveplace: save places inside files/buffers
-  (setq save-place-file "~/.emacs.d/lisp/data/saveplace")
-  (setq-default save-place t)
-  (setq auto-save-interval 500)
 #+END_SRC
 
 **** Font lock
@@ -227,7 +222,6 @@
 (require 'powerline)
 (spaceline-spacemacs-theme)
 #+END_SRC
-
 **** Recentf: remember last visited files
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: recentf
@@ -237,7 +231,6 @@
 ;(global-set-key "\C-c\ \C-r" 'recentf-open-files) ;; BINDING-KEY
 (recentf-mode)
 #+END_SRC
-
 **** Aliases
 #+BEGIN_SRC emacs-lisp
 (defalias 'list-buffers 'ibuffer)
@@ -1200,13 +1193,12 @@ With a prefix argument, use comint-mode."
     '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
   (setq flycheck-check-syntax-automatically '(mode-enabled save))
 #+END_SRC
-****** Flycheck e helm (i hate tooltips)
+***** Flycheck e helm (i hate tooltips)
 #+BEGIN_SRC emacs-lisp
 (require 'helm-flycheck) ;; Not necessary if using ELPA package
 (eval-after-load 'flycheck
   '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
 #+END_SRC
-
 **** Company Mode: autocomplete on steroids
 #+BEGIN_SRC emacs-lisp
 ;; PACKAGE: company-mode
@@ -1242,17 +1234,15 @@ With a prefix argument, use comint-mode."
 (require 'semantic)
 (global-semanticdb-minor-mode 1)
 (global-semantic-idle-scheduler-mode 1)
-;; mostra a função em que estamos em cima da tela
+;; show function we are in screen header
 (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
-;; adicionando mais paths para completion do semantic mode
-;; para toda biblioteca que eu quiser ter semantic, eu adiciono aqui
 (semantic-add-system-include "/usr/include/boost" 'c++-mode)
-;; (semantic-add-system-include "~linux/include") ;nao tenho esse diretorio
-(semantic-add-system-include "/usr/local/include") ;aqui ficaria os includes da máquina local
-(semantic-add-system-include "/usr/include") ;vou colocar o include (mesmo sabendo que ele está por padrão)
+;; (semantic-add-system-include "~linux/include")
+(semantic-add-system-include "/usr/local/include")
+(semantic-add-system-include "/usr/include")
 #+END_SRC
 
-**** Whitespace
+**** Whitespace mode
 #+BEGIN_SRC emacs-lisp
 	 (add-hook 'prog-mode-hook (lambda () (interactive) (setq
 	 show-trailing-whitespace 1)))
@@ -1266,11 +1256,11 @@ With a prefix argument, use comint-mode."
 **** :OFF: Counsel-Dash
 	 :OFF: because i prefel zeal at point
 #+BEGIN_SRC emacs-lisp
-;;; PACKAGE: counsel-dash
-;;; see dash docsets with counsel (helm)
-;;;(require 'counsel-dash)
+   Tdf
+  ;;; PACKAGE: counsel-dash
+  ;;; see dash docsets with counsel (helm)
+  ;;;(require 'counsel-dash)
 #+END_SRC
-
 **** :OFF: Projectile
 	 :OFF: it's a beast, i need to learn how to manage a project.
 #+BEGIN_SRC emacs-lisp
@@ -1280,11 +1270,19 @@ With a prefix argument, use comint-mode."
 
 **** :OFF: Haskell
 	 not yet, sorry
+**** :OFF: saveplaces
+#+BEGIN_SRC emacs-lisp
+  ;; PACKAGE: saveplace: save places inside files/buffers
+;;  (setq save-place-file "~/.emacs.d/lisp/data/saveplace")
+;;  (require 'saveplace)
+;;  (setq-default save-place t)
+;;  (setq auto-save-interval 500)
+#+END_SRC
 *** Hooks
 #+BEGIN_SRC emacs-lisp
-(add-hook 'before-save-hook 'delete-trailing-whitespace) ;; remove the dreadful trailing whitespace
-(add-hook 'text-mode-hook 'turn-on-auto-fill) ;; text mode = best place for auto fill mode
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace) ;; remove the dreadful trailing whitespace
+  (add-hook 'text-mode-hook 'turn-on-auto-fill) ;; text mode = best place for auto fill mode
+  (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 #+END_SRC
 *** Keybindings and navigation
 **** Font size
@@ -1292,7 +1290,6 @@ With a prefix argument, use comint-mode."
 (bind-key "C-+" 'text-scale-increase)
 (bind-key "C--" 'text-scale-decrease)
 #+END_SRC
-**** Speedbar :OFF:
 #+BEGIN_SRC emacs-lisp
 ;(add-hook 'speedbar--reconfigure-keymaps-hook
 ;	  '(lambda ()
@@ -1388,7 +1385,7 @@ point reaches the beginning or end of the buffer, stop there."
    (guide-key-mode 1)))  ; Enable guide-key-mode
   #+END_SRC
 
-**** visible bookmarks (F2)
+**** visible bookmarks (C-F2)
 #+BEGIN_SRC emacs-lisp
 (use-package bm
   :bind (("<C-f2>" . bm-toggle)
@@ -1402,6 +1399,8 @@ point reaches the beginning or end of the buffer, stop there."
 ;;(global-set-key (kbd "s-.") 'avy-goto-word-or-subword-1)
 ;;(global-set-key (kbd "s-w") 'ace-window)
 #+END_SRC
+**** Speedbar :OFF:
+
 **** :OFF: Outline Mode (HS)
 
 #+BEGIN_SRC emacs-lisp
