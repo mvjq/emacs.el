@@ -4,6 +4,7 @@
  - <l + TAB: opens a latex block
  - <s + TAB: opens a source code block
  - <q + TAB: opens a quotation block
+
 * Configuration
 *** Initialization
 **** Personal info
@@ -35,7 +36,6 @@
 #+BEGIN_SRC emacs-lisp
 (setq initial-major-mode 'org-mode)
 #+END_SRC
-
 **** Backup
 #+BEGIN_SRC emacs-lisp
   (setq make-backup-files t ;; yep for backup
@@ -187,11 +187,11 @@
 ****** TODO colocar o imenu-or-semantic dentro de um atalho melhor
 **** Linum - line numbers
 #+BEGIN_SRC emacs-lisp
-;; PACKAGE: linum-mode
-;; numeração de linhas inteligentes
-(global-linum-mode t)
-;; turning off in org-mode because it's really, really slow
-(add-hook 'org-mode-hook (lambda () (linum-mode 0)))
+  ;; PACKAGE: linum-mode
+  ;; numeração de linhas inteligentes
+  (global-linum-mode t)
+  ;; turning off in org-mode because it's really, really slow
+  (add-hook 'org-mode-hook (lambda () (linum-mode 0)))
 #+END_SRC
 **** Winner Mode - frame navigation
 
@@ -218,8 +218,11 @@
 ;; PACKAGE: powerline.el
 ;; powering the mode line with spacemacs theme
 (add-to-list 'load-path "~/.emacs.d/lisp/spaceline")
-(require 'spaceline-config)
 (require 'powerline)
+(require 'spaceline-config)
+(spaceline-spacemacs-theme)
+(setq spaceline-directed-separators 'curve)
+(require 'spaceline-config)
 #+END_SRC
 **** Recentf: remember last visited files
 #+BEGIN_SRC emacs-lisp
@@ -780,14 +783,19 @@ abort completely with `C-g'."
 #+BEGIN_SRC emacs-lisp
 ;; breadcrumb to help find bugs
 (message "%s" "[init file]Setting emacs theming and fonts")
-(spaceline-spacemacs-theme)
+;;(spaceline-emacs-theme)
 #+END_SRC
 **** Fonts and smooth scroll
 #+BEGIN_SRC emacs-lisp
-(set-frame-font  "inconsolata-14")
+
+
+;;(set-frame-font  "Fantasque Sans Mono-13")  #didnt like, the k and s are strange
 ;; scrolling to always be a line at a time
+;; (set-frame-font "InputSerif-13")
+(set-frame-font "Hack-13")
 (setq scroll-conservatively 10000)
 #+END_SRC
+
 **** frame title and flymake highlight
 #+BEGIN_SRC emacs-lisp
 ;; Frame Title Bar with full path of file
@@ -816,12 +824,9 @@ font-lock-warning-face t)))))
 
 **** Colors/Theme, a lot of colors
 #+BEGIN_SRC emacs-lisp
-;; i really dont know why i doing this add-to-list again
-(add-to-list 'custom-theme-load-path "/home/mvjunq/.emacs.d/elpa")
-;(load-theme 'sanityinc-solarized-light t)
+  ;; i really dont know why i doing this add-to-list again
+  (add-to-list 'custom-theme-load-path "/home/mvjunq/.emacs.d/elpa")
 (load-theme 'spacemacs-dark t)
-;; (load-theme solarized-light t)
-;(load-theme 'base16-monokai-dark)
 #+END_SRC
 
 **** Set cursor color (i hate the default color on solarized)
@@ -1102,6 +1107,8 @@ With a prefix argument, use comint-mode."
 ;; pep8
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+(setq-default py-split-windows-on-execute-function 'split-window-horizontally)
+(setq python-shell-prompt-detect-failure-warning nil)
 #+END_SRC
 ***** Hasktags
 	  Use the M-. luke11
@@ -1157,6 +1164,48 @@ With a prefix argument, use comint-mode."
   (add-to-list 'exec-path my-cabal-path))
 #+END_SRC
 
+**** Web
+***** Skewer Mode
+	  "live" mode with CSS, HTML and JS files
+#+BEGIN_SRC emacs-lisp
+(add-hook 'js2-mode-hook 'skewer-mode)
+(add-hook 'css-mode-hook 'skewer-css-mode)
+(add-hook 'html-mode-hook 'skewer-html-mode)
+#+END_SRC
+***** web mode
+#+BEGIN_SRC emacs-lisp
+  (require 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode)
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+  ;; hooks
+
+  (defun web-mode-hooks()
+	  "Hooks for web mode"
+	  (setq web-mode-markup-indent-offset 2)
+	  (setq web-mode-css-indent-offset 2)
+	  (setq web-mode-code-indent-offset 2)
+	  (setq web-mode-enable-auto-pairing t)
+      (setq web-mode-enable-css-colorization t)
+	(setq web-mode-enable-current-element-highlight t))
+  (add-hook 'web-mode-hook 'web-mode-hooks)
+
+#+END_SRC
+***** autocomplete for web mode
+#+BEGIN_SRC emacs-lisp
+(setq web-mode-ac-sources-alist
+  '(("css" . (ac-source-css-property))
+    ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+(setq ac-js2-evaluate-calls t)
+;; add library HERE
+;; (setq ac-js2-external-libraries '("full/path/to/a-library.js"))
+#+END_SRC
 **** Aggressive Indent - WARNING: really agressive
 
 #+BEGIN_SRC emacs-lisp
@@ -1448,6 +1497,10 @@ point reaches the beginning or end of the buffer, stop there."
                        ("c" "Code" entry (file+headline "~/Org/code.org" "Code and things") ;; for interest stuff when i code
                           "** [%f] => %^{%?}")))
 
+#+END_SRC
+**** dont show markup chars
+#+BEGIN_SRC emacs-lisp
+(setq org-hide-emphasis-markers t)
 #+END_SRC
 *** Defuns
 	Functions i found in the interwebs (sorry for not having the

@@ -13,11 +13,11 @@ Atencao, utilizo org-babel-load para *programacao literaria*.
   - [ ] use-package everywhere
   - [ ] better lisp dialects modes (clojure/scheme/commonlisp)
   - [ ] a better python worfklow
-  - [ ] make init fast (or faster)
-  ----- [x] toying with the emacs gc and jit
-  ----- [ ] emacs server?
-  ----- [ ] putting the entire emacs file in ram?
+  - [ ] make init fast (or faster)  
+  ----- [x] toying with the emacs gc and jit  
+  ----- [ ] emacs server?  
+  ----- [ ] putting the entire emacs file in ram?  
   - [ ] folders and dependency files on github (move everything out of
-    elpa directory?)
-     - worth the effort???
+    elpa directory?)  
+     - worth the effort???  
   - [ ] new directory structure
