@@ -4,7 +4,6 @@
  - <l + TAB: opens a latex block
  - <s + TAB: opens a source code block
  - <q + TAB: opens a quotation block
-   
 * Configuration
 *** Initialization
 **** Personal info
@@ -36,6 +35,7 @@
 #+BEGIN_SRC emacs-lisp
 (setq initial-major-mode 'org-mode)
 #+END_SRC
+
 **** Backup
 #+BEGIN_SRC emacs-lisp
   (setq make-backup-files t ;; yep for backup
@@ -187,11 +187,11 @@
 ****** TODO colocar o imenu-or-semantic dentro de um atalho melhor
 **** Linum - line numbers
 #+BEGIN_SRC emacs-lisp
-  ;; PACKAGE: linum-mode
-  ;; numeração de linhas inteligentes
-  (global-linum-mode t)
-  ;; turning off in org-mode because it's really, really slow
-  (add-hook 'org-mode-hook (lambda () (linum-mode 0)))
+;; PACKAGE: linum-mode
+;; numeração de linhas inteligentes
+(global-linum-mode t)
+;; turning off in org-mode because it's really, really slow
+(add-hook 'org-mode-hook (lambda () (linum-mode 0)))
 #+END_SRC
 **** Winner Mode - frame navigation
 
@@ -218,11 +218,9 @@
 ;; PACKAGE: powerline.el
 ;; powering the mode line with spacemacs theme
 (add-to-list 'load-path "~/.emacs.d/lisp/spaceline")
+(require 'spaceline-config)
 (require 'powerline)
-(require 'spaceline-config)
 (spaceline-spacemacs-theme)
-;(setq spaceline-directed-separators 'curve)
-(require 'spaceline-config)
 #+END_SRC
 **** Recentf: remember last visited files
 #+BEGIN_SRC emacs-lisp
@@ -783,19 +781,13 @@ abort completely with `C-g'."
 #+BEGIN_SRC emacs-lisp
 ;; breadcrumb to help find bugs
 (message "%s" "[init file]Setting emacs theming and fonts")
-;;(spaceline-emacs-theme)
 #+END_SRC
 **** Fonts and smooth scroll
 #+BEGIN_SRC emacs-lisp
-
-
-;;(set-frame-font  "Fantasque Sans Mono-13")  #didnt like, the k and s are strange
+(set-frame-font  "inconsolata-14")
 ;; scrolling to always be a line at a time
-;; (set-frame-font "InputSerif-13")
-(set-frame-font "Hack-13")
 (setq scroll-conservatively 10000)
 #+END_SRC
-
 **** frame title and flymake highlight
 #+BEGIN_SRC emacs-lisp
 ;; Frame Title Bar with full path of file
@@ -824,9 +816,12 @@ font-lock-warning-face t)))))
 
 **** Colors/Theme, a lot of colors
 #+BEGIN_SRC emacs-lisp
-  ;; i really dont know why i doing this add-to-list again
-  (add-to-list 'custom-theme-load-path "/home/mvjunq/.emacs.d/elpa")
+;; i really dont know why i doing this add-to-list again
+(add-to-list 'custom-theme-load-path "/home/mvjunq/.emacs.d/elpa")
+;(load-theme 'sanityinc-solarized-light t)
 (load-theme 'spacemacs-dark t)
+;; (load-theme solarized-light t)
+;(load-theme 'base16-monokai-dark)
 #+END_SRC
 
 **** Set cursor color (i hate the default color on solarized)
@@ -1107,8 +1102,6 @@ With a prefix argument, use comint-mode."
 ;; pep8
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-(setq-default py-split-windows-on-execute-function 'split-window-horizontally)
-(setq python-shell-prompt-detect-failure-warning nil)
 #+END_SRC
 ***** Hasktags
 	  Use the M-. luke11
@@ -1164,48 +1157,6 @@ With a prefix argument, use comint-mode."
   (add-to-list 'exec-path my-cabal-path))
 #+END_SRC
 
-**** Web
-***** Skewer Mode
-	  "live" mode with CSS, HTML and JS files
-#+BEGIN_SRC emacs-lisp
-(add-hook 'js2-mode-hook 'skewer-mode)
-(add-hook 'css-mode-hook 'skewer-css-mode)
-(add-hook 'html-mode-hook 'skewer-html-mode)
-#+END_SRC
-***** web mode
-#+BEGIN_SRC emacs-lisp
-  (require 'web-mode)
-  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-
-  ;; hooks
-
-  (defun web-mode-hooks()
-	  "Hooks for web mode"
-	  (setq web-mode-markup-indent-offset 2)
-	  (setq web-mode-css-indent-offset 2)
-	  (setq web-mode-code-indent-offset 2)
-	  (setq web-mode-enable-auto-pairing t)
-      (setq web-mode-enable-css-colorization t)
-	(setq web-mode-enable-current-element-highlight t))
-  (add-hook 'web-mode-hook 'web-mode-hooks)
-
-#+END_SRC
-***** autocomplete for web mode
-#+BEGIN_SRC emacs-lisp
-(setq web-mode-ac-sources-alist
-  '(("css" . (ac-source-css-property))
-    ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-(setq ac-js2-evaluate-calls t)
-;; add library HERE
-;; (setq ac-js2-external-libraries '("full/path/to/a-library.js"))
-#+END_SRC
 **** Aggressive Indent - WARNING: really agressive
 
 #+BEGIN_SRC emacs-lisp
@@ -1305,7 +1256,8 @@ With a prefix argument, use comint-mode."
 **** :OFF: Counsel-Dash
 	 :OFF: because i prefel zeal at point
 #+BEGIN_SRC emacs-lisp
-;;; PACKAGE: counsel-dash
+   Tdf
+  ;;; PACKAGE: counsel-dash
   ;;; see dash docsets with counsel (helm)
   ;;;(require 'counsel-dash)
 #+END_SRC
@@ -1472,13 +1424,34 @@ point reaches the beginning or end of the buffer, stop there."
       org-src-tab-acts-natively t)
 #+END_SRC
 **** Org Agenda with google calendar					  :workinginprogress:
-	 Loading a file with personal info (googles keys and such, so i
-	 use load-file)
-#+BEGIN_SRC emacs-lisp
-  (load-file "~/.emacs.d/agenda_config.el")
-  (require 'agenda_config)
+	 #+BEGIN_SRC emacs-lisp
+       (setq org-agenda-files (list "~/Org/notes.org"
+                                    "~/Org/aulas.org") ;;synch file with google calendar)
+             ;; set key combos
+             (define-key global-map "\C-ca" 'org-agenda)
 
-#+END_SRC
+             (require 'org-gcal)
+             (require 'calfw-org)
+             (setq org-gcal-client-id "55299990237-jt1fteac52937vv5i5aj9fq3ecqahs5a.apps.googleusercontent.com"
+                   org-gcal-client-secret "Sp6sPhS6tk2u3Hnq4BdxQ-na"
+                   org-gcal-file-alist '(("7apsb6f8561k83t5cbdrghhh9c@group.calendar.google.com" . "~/Org/aulas.org")
+                                         ("1b9f2n0a8vrrf5p0uk5p35b3vg@group.calendar.google.com" . "~/Org/usp.org")
+                                         ("8l7nuq21l3u8ivj9dd72en34rc@group.calendar.google.com" . "~/Org/provas.org")))
+
+
+             ;; defun para facilitar as coisas
+             (defun my-open-calendar ()
+               (interactive)
+               (cfw:open-calendar-buffer
+                :contents-sources
+                (list
+                 (cfw:org-create-source "Gold") )))
+
+             ;; for sync purpose
+             (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+             (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+
+	 #+END_SRC
 **** org capture, best way to use todo					  :workinginprogress:
 	 #+BEGIN_SRC emacs-lisp
        (setq org-default-notes-file "~/Org/notes.org")
@@ -1497,10 +1470,6 @@ point reaches the beginning or end of the buffer, stop there."
                        ("c" "Code" entry (file+headline "~/Org/code.org" "Code and things") ;; for interest stuff when i code
                           "** [%f] => %^{%?}")))
 
-#+END_SRC
-**** dont show markup chars
-#+BEGIN_SRC emacs-lisp
-(setq org-hide-emphasis-markers t)
 #+END_SRC
 *** Defuns
 	Functions i found in the interwebs (sorry for not having the
@@ -1707,3 +1676,4 @@ That buffer should be current already."
 		(insert output)
 		(search-backward "ERROR!")))))
 #+END_SRC
+adsadasd
