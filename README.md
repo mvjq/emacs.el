@@ -1,23 +1,25 @@
-### emacs-init: my emacs init configuration
+### emacs-init
 
 **ps: beware the bad english.**
-**ps: atencao para portugues sem acentos (como pode ser visto)**
+**ps: atencao para portugues sem acentos**
 
-Attention, i use org-babel-load for *literate programming*.
-Atencao, utilizo org-babel-load para *programacao literaria*.
-(thanks knuth)
+and one more thing: i use org-babel-load for *literate programming*(thanks knuth!).
 
 * TODOs:
   - [x] Emacs.org on github
   - [x] end portunhol
   - [ ] use-package everywhere
-  - [ ] better lisp dialects modes (clojure/scheme/commonlisp)
   - [ ] a better python worfklow
-  - [ ] make init fast (or faster)  
-  ----- [x] toying with the emacs gc and jit  
-  ----- [ ] emacs server?  
-  ----- [ ] putting the entire emacs file in ram?  
+  - [ ] better lisp dialects modes (clojure/scheme/commonlisp)
+  - [ ] make init fast (or faster)
+  ----- [x] toying with the emacs gc and jit
+  ----- [ ] emacs server?
+  ----- [ ] putting the entire emacs file in ram? (FAIL)
   - [ ] folders and dependency files on github (move everything out of
-    elpa directory?)  
-     - worth the effort???  
+    elpa directory?)
+     - worth the effort??? (nope)
   - [ ] new directory structure
+      - lisp (non elpa packages)
+      - elpa (everything is (m)elpa)
+      - misc
+      -
