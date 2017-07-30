@@ -13,14 +13,14 @@ and one more thing: i use org-babel-load for *literate programming*(thanks knuth
   - [ ] a better haskell worfklow
   - [ ] better lisp dialects modes (clojure/scheme/commonlisp)
   - [ ] make init fast (or faster)
-  ----- [x] toying with the emacs gc and jit
-  ----- [ ] emacs server?
-  ----- [ ] putting the entire emacs file in ram? (FAIL)
+  -----  [x] toying with the emacs gc and jit
+  -----  [ ] emacs server?
+  -----  [ ] putting the entire emacs file in ram? (FAIL)
   - [ ] folders and dependency files on github (move everything out of
       elpa directory?)
-     - worth the effort??? (nope)
+  ------ [x] worth the effort??? (nope)
   - [ ] new directory structure
-      - lisp (non elpa packages)
-      - elpa (everything is (m)elpa)
-      - misc
-      -
+  ------ [ ] lisp (non elpa packages)
+  ------ [ ] elpa (everything is (m)elpa)
+  ------ [ ] misc
+
