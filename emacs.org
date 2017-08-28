@@ -33,11 +33,9 @@
       (add-to-list 'package-archives
                    '("gnu" . "http://elpa.gnu.org/packages/"))
       (add-to-list 'package-archives
-                   '("marmalade" . "https://marmalade-repo.org/packages/"))
-      (add-to-list 'package-archives
                    '("org" . "http://orgmode.org/elpa/") t)
       (add-to-list 'package-archives
-                   '("tromey" . "http://tromey.com/elpa/") t)      )
+                   '("tromey" . "http://tromey.com/elpa/") t))
 (require 'use-package)
 (require 'diminish)                ;; if you use :diminishn
 (require 'bind-key)                ;; bind-key
@@ -79,60 +77,61 @@
 **** HELM
 #+BEGIN_SRC emacs-lisp
 
-	;;(add-to-list 'load-path "~/.emacs.d/elpa/helm")
-	;;(add-to-list 'load-path "~/.emacs.d/lisp/helm/emacs-async")
-		;; PACKAGE: helm-mode and helm-config
-	(use-package helm
-	:ensure t
-	:init
-	(when (executable-find "curl")
-	  (setq helm-google-suggest-use-curl-p t))
-	(setq helm-split-window-in-side-p t ; open helm buffer inside current window, not occupy whole other window
-		  helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
-		  helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
-		  helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
-		  helm-ff-file-name-history-use-recentf t
-		  helm-M-x-fuzzy-match t ;; optional fuzzy matching for helm-M-x
-		  helm-buffers-fuzzy-matching t
-		  helm-recentf-fuzzy-match t
-		  helm-apropos-fuzzy-match t
-		  helm-semantic-fuzzy-match t
-		  helm-imenu-fuzzy-match t
-		  helm-locate-fuzzy-match t
-		  helm-lisp-fuzzy-completion t)
-	(helm-autoresize-mode t)
-	:config
-	(require 'helm-config)
-	;; [#keybidings]
-	;; global
-	;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-	;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-	;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-	(global-set-key (kbd "C-c h") 'helm-command-prefix)
-	(global-set-key (kbd "M-x") 'helm-M-x)
-	(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-	(global-set-key (kbd "C-x b") 'helm-mini)
-	(global-set-key (kbd "C-x C-f") 'helm-find-files)
-	(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-	(global-set-key (kbd "C-c h x") 'helm-register)
-	(global-set-key (kbd "C-c h g") 'helm-google-suggest)
-	(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
-	(global-set-key (kbd "C-c h o") 'helm-occur)
-	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent actionev
-	(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-	(define-key helm-map (kbd "C-z")  'helm-select-action); list actions using C-z
-	(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
-  ;; helm-eshell
-	;;	 (use-package helm-eshell
-	;;	 :ensure t
-	;;	 :defer t
-	;;	 :config
-	;;	 (add-hook 'eshell-mode-hook
-	;;			  #'(lambda ()
-	;;				  (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
-		 ;;bindings
-	;;	 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-	;;	 (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history))
+	 ;;(add-to-list 'load-path "~/.emacs.d/elpa/helm")
+	 ;;(add-to-list 'load-path "~/.emacs.d/lisp/helm/emacs-async")
+		 ;; PACKAGE: helm-mode and helm-config
+	 (use-package helm
+	 :ensure t
+	 :init
+	 (when (executable-find "curl")
+	   (setq helm-google-suggest-use-curl-p t))
+	 (setq helm-split-window-in-side-p t ; open helm buffer inside current window, not occupy whole other window
+		   helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
+		   helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
+		   helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
+		   helm-ff-file-name-history-use-recentf t
+		   helm-M-x-fuzzy-match t ;; optional fuzzy matching for helm-M-x
+		   helm-buffers-fuzzy-matching t
+		   helm-recentf-fuzzy-match t
+		   helm-apropos-fuzzy-match t
+		   apropos-sort-by-scores t
+		   helm-semantic-fuzzy-match t
+		   helm-imenu-fuzzy-match t
+		   helm-locate-fuzzy-match t
+		   helm-lisp-fuzzy-completion t)
+	 (helm-autoresize-mode t)
+	 :config
+	 (require 'helm-config)
+	 ;; [#keybidings]
+	 ;; global
+	 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+	 ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+	 ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+	 (global-set-key (kbd "C-c h") 'helm-command-prefix)
+	 (global-set-key (kbd "M-x") 'helm-M-x)
+	 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+	 (global-set-key (kbd "C-x b") 'helm-mini)
+	 (global-set-key (kbd "C-x C-f") 'helm-find-files)
+	 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+	 (global-set-key (kbd "C-c h x") 'helm-register)
+	 (global-set-key (kbd "C-c h g") 'helm-google-suggest)
+	 (global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
+	 (global-set-key (kbd "C-c h o") 'helm-occur)
+	 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent actionev
+	 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+	 (define-key helm-map (kbd "C-z")  'helm-select-action); list actions using C-z
+	 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
+   ;; helm-eshell
+	 ;;	 (use-package helm-eshell
+	 ;;	 :ensure t
+	 ;;	 :defer t
+	 ;;	 :config
+	 ;;	 (add-hook 'eshell-mode-hook
+	 ;;			  #'(lambda ()
+	 ;;				  (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
+		  ;;bindings
+	 ;;	 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+	 ;;	 (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history))
 
 #+END_SRC
 **** Linum - line numbers
@@ -140,10 +139,10 @@
 	;; PACKAGE: linum-mode
 	;; numeração de linhas inteligentes
 	(use-package linum :ensure t
-	 :config
-	(global-linum-mode t))
-	(add-hook 'org-mode-hook (lambda () (linum-mode 0)))
-	;; turning off in org-mode because it's really, really slow
+	:config
+	;(global-linum-mode t))
+	(add-hook 'prog-mode-hook 'linum-on)
+	(add-hook 'org-mode-hook (lambda () (linum-mode 0))))
 #+END_SRC
 **** Winner Mode - frame navigation
 #+BEGIN_SRC emacs-lisp
@@ -417,34 +416,34 @@
   global-highlight-parentheses-mode t)
 #+END_SRC
 
-**** CTags
+**** CTags :OFF:
 #+BEGIN_SRC emacs-lisp
- (setq path-to-ctags "/usr/bin/ctags"); <-- your ctags path here
-  (defun create-tags (dir-name)
-	 "Create tags file."
-	 (interactive "DDirectory: ")
-	 (eshell-command
-	  (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
+  ;;  (setq path-to-ctags "/usr/bin/ctags"); <-- your ctags path here
+  ;;   (defun create-tags (dir-name)
+  ;; 	 "Create tags file."
+  ;; 	 (interactive "DDirectory: ")
+  ;; 	 (eshell-command
+  ;; 	  (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
-(defadvice find-tag (around refresh-etags activate)
-   "Rerun etags and reload tags if tag not found and redo find-tag.
-   If buffer is modified, ask about save before running etags."
-  (let ((extension (file-name-extension (buffer-file-name))))
-	(condition-case err
-	ad-do-it
-	  (error (and (buffer-modified-p)
-		  (not (ding))
-		  (y-or-n-p "Buffer is modified, save it? ")
-		  (save-buffer))
-		 (er-refresh-etags extension)
-		 ad-do-it))))
+  ;; (defadvice find-tag (around refresh-etags activate)
+  ;;    "Rerun etags and reload tags if tag not found and redo find-tag.
+  ;;    If buffer is modified, ask about save before running etags."
+  ;;   (let ((extension (file-name-extension (buffer-file-name))))
+  ;; 	(condition-case err
+  ;; 	ad-do-it
+  ;; 	  (error (and (buffer-modified-p)
+  ;; 		  (not (ding))
+  ;; 		  (y-or-n-p "Buffer is modified, save it? ")
+  ;; 		  (save-buffer))
+  ;; 		 (er-refresh-etags extension)
+  ;; 		 ad-do-it))))
 
-  (defun er-refresh-etags (&optional extension)
-  "Run etags on all peer files in current dir and reload them silently."
-  (interactive)
-  (shell-command (format "etags *.%s" (or extension "el")))
-  (let ((tags-revert-without-query t))  ; don't query, revert silently
-	(visit-tags-table default-directory nil)))
+  ;;   (defun er-refresh-etags (&optional extension)
+  ;;   "Run etags on all peer files in current dir and reload them silently."
+  ;;   (interactive)
+  ;;   (shell-command (format "etags *.%s" (or extension "el")))
+  ;;   (let ((tags-revert-without-query t))  ; don't query, revert silently
+  ;; 	(visit-tags-table default-directory nil)))
 #+END_SRC
 **** Visual Bookmarks using mouse
 #+BEGIN_SRC emacs-lisp
@@ -704,10 +703,64 @@ https://iqbalansari.github.io/blog/2014/12/07/automatically-create-parent-direct
         (when (and (not (file-exists-p parent-directory))
                    (y-or-n-p (format "Directory `%s' does not exist! Create it?" parent-directory)))
           (make-directory parent-directory t))))
-(add-to-list 'find-file-not-found-functions #'my-create-non-existent-directory)
+(add-to-list 'find-file-not-found-functions 'my-create-non-existent-directory)
+#+END_SRC
+**** pdf
+***** pdf view > docview for pdf
+#+BEGIN_SRC emacs-lisp
+(pdf-tools-install)
+#+END_SRC
+***** scroll other window
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/lisp/misc/scroll-other-window")
+  (require 'scroll-other-window)
+  (defvar-local sow-scroll-up-command nil)
+  (defvar-local sow-scroll-down-command nil)
+  (defvar sow-mode-map
+	(let ((km (make-sparse-keymap)))
+	  (define-key km [remap scroll-other-window] 'sow-scroll-other-window)
+	  (define-key km [remap scroll-other-window-down] 'sow-scroll-other-window-down)
+	  km)
+	"Keymap used for `sow-mode'.")
+
+  (define-minor-mode sow-mode
+	"FIXME: Not documented."
+	nil nil nil
+	:global t)
+
+  (defun sow-scroll-other-window (&optional arg)
+	(interactive "P")
+	(sow--scroll-other-window-1 arg))
+
+  (defun sow-scroll-other-window-down (&optional arg)
+	(interactive "P")
+	(sow--scroll-other-window-1 arg t))
+
+  (defun sow--scroll-other-window-1 (n &optional down-p)
+	(let* ((win (other-window-for-scrolling))
+		   (cmd (with-current-buffer (window-buffer win)
+				  (if down-p
+					  (or sow-scroll-down-command #'scroll-up-command)
+					(or sow-scroll-up-command #'scroll-down-command)))))
+	  (with-current-buffer (window-buffer win)
+		(save-excursion
+		  (goto-char (window-point win))
+		  (with-selected-window win
+			(funcall cmd n))
+		  (set-window-point win (point))))))
 
 #+END_SRC
 *** Buffers
+**** IDO
+#+BEGIN_SRC emacs-lisp
+	 (ido-mode 1)
+	 (setq indo-everywhere t)
+     (setq ido-enable-flex-matching t)
+#+END_SRC
+**** Imenu (it's cool)
+	 #+BEGIN_SRC emacs-lisp
+	   (global-set-key (kbd "M-i") 'imenu)
+	 #+END_SRC
 **** Scratch Buffer
 #+BEGIN_SRC emacs-lisp
 ;; persistent-scratch, things i put in scratch buffer will remain to the ends of time
@@ -756,6 +809,60 @@ font-lock-warning-face t)))))
 (set-cursor-color "#c75100")
 #+END_SRC
 *** Programming
+**** golang
+***** PATH
+#+BEGIN_SRC emacs-lisp
+  ;; (defun set-exec-path-from-shell-PATH ()
+  ;;   (let ((path-from-shell (replace-regexp-in-string
+  ;;                           "[ \t\n]*$"
+  ;;                           ""
+  ;;                           (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+  ;;     (setenv "PATH" path-from-shell)
+  ;;     (setq eshell-path-env path-from-shell) ; for eshell users
+  ;;     (setq exec-path (split-string path-from-shell path-separator))))
+
+  ;; (when window-system (set-exec-path-from-shell-PATH))
+  ;; (setenv "GOPATH" "/home/mvjunq/Dev/go/gocode")
+  ; :TODO: feels like a hack
+(add-to-list 'exec-path "/home/mvjunq/Dev/go/gocode/bin")
+#+END_SRC
+***** setup
+#+BEGIN_SRC emacs-lisp
+(defun my-go-mode-hook ()
+  (setq gofmt-command "goimports") ;; instead of go-fmt
+  ; Customize compile command to run go build
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+           "go generate && go build -v && go test -v && go vet"))
+  ; Go guru
+  ;(load-file "$GOPATH/src/golang.org/x/tools/cmd/guru/guru.el")
+  ; Godef jump key binding
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (local-set-key (kbd "M-*") 'pop-tag-mark))
+#+END_SRC
+***** company-go
+#+BEGIN_SRC emacs-lisp
+(require 'company)                                   ; load company mode
+(require 'company-go)                                ; load company mode go
+(setq company-tooltip-limit 20)                      ; bigger popup window
+(setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
+(setq company-echo-delay 0)                          ; remove annoying blinking
+(setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
+(add-hook 'go-mode-hook (lambda ()
+                          (set (make-local-variable 'company-backends) '(company-go))
+                          (company-mode)))
+#+END_SRC
+***** eldoc and hooks
+#+BEGIN_SRC emacs-lisp
+(add-hook 'go-mode-hook 'go-eldoc-setup)
+(add-hook 'before-save-hook 'gofmt-before-save)
+(add-hook 'go-mode-hook 'company-mode)
+#+END_SRC
+***** bindings
+#+BEGIN_SRC emacs-lisp
+(add-hook 'go-mode-hook (lambda ()
+                          (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
+#+END_SRC
 **** C/C++
 ***** Compilation
 #+BEGIN_SRC emacs-lisp
@@ -1139,6 +1246,14 @@ Zeal is cool, Zeal is nice (but very slow)
   (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 #+END_SRC
 *** Keybindings and navigation
+**** other screen
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-o") 'other-window)
+#+END_SRC
+
+#+RESULTS:
+: other-window
+
 **** Font size
 #+BEGIN_SRC emacs-lisp
 (bind-key "C-+" 'text-scale-increase)
