@@ -6,14 +6,7 @@ ps: i use org-babel-load for *literate programming*(thanks knuth!).
   - [x] Emacs.org on github
   - [ ] end portunhol
   - [x] use-package everywhere
-<<<<<<< Updated upstream
-  - [ ] better python workflow
-  - [ ] better haskell workflow 
-  - [ ] better go workflow (gotools)
   - [ ] better lisp dialects modes (clojure/scheme/commonlisp)
-  - [x] make init fast (or faster)  
-=======
-  - [ ] a better python
   - [ ] a better haskell worfklow
   - [ ] a better go worflox
        - macros for make + collections
@@ -27,4 +20,3 @@ ps: i use org-babel-load for *literate programming*(thanks knuth!).
         taggle :dir ect)
       - go: apply test for the current function ()
   - [ ] new directory structure
->>>>>>> Stashed changes
