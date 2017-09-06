@@ -24,21 +24,21 @@
 **** Package System
 #+BEGIN_SRC emacs-lisp
   (when (>= emacs-major-version 24)
-      (require 'package)
-      (setq package-enable-at-startup nil)
-      (setq package-archives '())
-      (package-initialize)
-      (add-to-list 'package-archives
-                   '("melpa" . "http://melpa.milkbox.net/packages/") t)
-      (add-to-list 'package-archives
-                   '("gnu" . "http://elpa.gnu.org/packages/"))
-      (add-to-list 'package-archives
-                   '("org" . "http://orgmode.org/elpa/") t)
-      (add-to-list 'package-archives
-                   '("tromey" . "http://tromey.com/elpa/") t))
-(require 'use-package)
-(require 'diminish)                ;; if you use :diminishn
-(require 'bind-key)                ;; bind-key
+		(require 'package)
+		(setq package-enable-at-startup nil)
+		(setq package-archives '())
+		(package-initialize)
+		(add-to-list 'package-archives
+					 '("melpa" . "http://melpa.milkbox.net/packages/") t)
+		(add-to-list 'package-archives
+					 '("gnu" . "http://elpa.gnu.org/packages/"))
+		(add-to-list 'package-archives
+					 '("org" . "http://orgmode.org/elpa/") t)
+		(add-to-list 'package-archives
+					 '("tromey" . "http://tromey.com/elpa/") t))
+  (require 'use-package)
+  (require 'diminish)                ;; if you use :diminishn
+  (require 'bind-key)                ;; bind-key
 
 #+END_SRC
 
@@ -346,7 +346,8 @@
 	 try-expand-line ;; try to complete teh current line to an entire line in the buffer
 	 try-complete-lisp-symbol-partially ;; try to coimplete as an emacs lisp symbol,
 	 try-complete-lisp-symbol))
-  (global-set-key (kbd "M-/") 'hippie-expand) ;; replace dabbrev-expand
+  ;;(global-set-key (kbd "M-/") 'hippie-expand) ;; replace dabbrev-expand
+  (global-set-key [remap dabbrev-expand] 'hippie-expand)
   (use-package expand-region
    :config
    (global-key-binding (kbd "M-m") 'er/expand-region))
@@ -517,6 +518,7 @@ saving the last frame/windows/buffers configurations
 		 (if (y-or-n-p "Restore desktop? ")))))
 #+END_SRC
 **** goodbye, suspend fucking frame
+
 #+BEGIN_SRC emacs-lisp
 
 (global-unset-key (kbd "C-z"))
@@ -528,7 +530,11 @@ saving the last frame/windows/buffers configurations
       (message "suspend-frame disabled for graphical displays.")
     (suspend-frame)))
 #+END_SRC
+**** Dired-x
+#+BEGIN_SRC emacs-lisp
+(require 'dired-x)
 
+#+END_SRC
 *** Editing file
 **** Searching
 #+BEGIN_SRC emacs-lisp
@@ -572,7 +578,6 @@ Uses swiper instead of isearch
 
   ;; PACKAGE: dtrt-indent
   ;; maitain indentation for files
-
   (use-package dtrt-indent
    :diminish
    :config
@@ -750,6 +755,24 @@ https://iqbalansari.github.io/blog/2014/12/07/automatically-create-parent-direct
 		  (set-window-point win (point))))))
 
 #+END_SRC
+**** because i dont have exclamation mark :(
+#+BEGIN_SRC emacs-lisp
+	(define-key global-map
+	  (kbd "C-c M-2")
+	  (lambda () (interactive) (insert "")))
+#+END_SRC
+**** Sudo TRAMP
+#+BEGIN_SRC emacs-lisp
+  ;foud in 'Mastering Emacs book'
+  (defun sudo()
+			"Use tramp to `sudo' the current buffer"
+		  (interactive)
+		  (when buffer-file-name
+		  (find-alternate-file
+			(concat "/sudo:root@locahost:"
+					buffer-file-name))))
+
+#+END_SRC
 *** Buffers
 **** IDO
 #+BEGIN_SRC emacs-lisp
@@ -808,6 +831,7 @@ font-lock-warning-face t)))))
 #+BEGIN_SRC emacs-lisp
 (set-cursor-color "#c75100")
 #+END_SRC
+
 *** Programming
 **** golang
 ***** PATH
